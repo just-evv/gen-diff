@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($autoloadPath1)) {
@@ -8,20 +10,30 @@ if (file_exists($autoloadPath1)) {
 } else {
     require_once $autoloadPath2;
 }
-
-$doc = /** @lang text */
+use function \Gendiff\genDiff;
+$doc =
     <<<DOC
 Generate diff
 
 Usage:
     gendiff (-h | --help)
     gendiff (-v | --version)
+    gendiff [--format <fmt>] <first file> <second file>
 
 Options:
     -h --help       Show this screen.
     -v --version    Show version.
+    --format <fmt>  Report format [default: stylish]
 DOC;
+
 $args = Docopt::handle($doc, array('version' => 'Generate diff 1.0'));
-foreach ($args as $k => $v) {
-    echo $k . ': ' . json_encode($v) . PHP_EOL;
-}
+
+$format = $args['--format'];
+$pathToFirstFile = $args['<first file>'];
+$pathToSecondFile = $args['<second file>'];
+
+
+$difference = genDiff($pathToFirstFile, $pathToSecondFile);
+
+echo($difference);
+
