@@ -5,7 +5,7 @@ validate:
 	composer validate
 
 lint:
-	phpcs -- --standard=PSR12 src bin
+	composer run-script phpcs -- --standard=PSR12 src bin
 
 gendiff:
 	./bin/gendiff
