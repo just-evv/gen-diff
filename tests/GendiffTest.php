@@ -20,6 +20,21 @@ class GendiffTest extends TestCase
         $this->assertEquals($result3, compareFiles('timeout', $file1, $file2));
     }
 
+    public function testJsonParse()
+    {
+
+        $pathToFile = 'fixtures/nested/json/file1.json';
+        $absolutePathToFile = getcwd() . '/' . $pathToFile;
+       // $(getcwd() . '/' . $pathToFile);
+        $result1 = jsonParse($pathToFile);
+        $result2 = jsonParse($absolutePathToFile);
+
+        $this->assertIsArray($result1);
+        $this->assertIsArray($result2);
+
+    }
+
+
 
 
 
