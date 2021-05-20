@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gendiff\Gendiff;
 
 use Symfony\Component\Yaml\Yaml;
-use function PHPUnit\Framework\throwException;
 
 function getExtension(string $pathToFile): string
 {
@@ -18,9 +17,16 @@ function jsonParse($pathToFile): array
     return json_decode($file, true);
 }
 
+function yamlParseHelper(object $object): array
+{
+    $array = (array) $object;
+    return array_map(fn ($node) => is_object($node) ? yamlParseHelper($node) : $node, $array);
+}
+
 function yamlParse(string $pathToFile): array
 {
-    return (array) Yaml::parseFile($pathToFile, Yaml::PARSE_OBJECT_FOR_MAP);
+    $parsedToObject = Yaml::parseFile($pathToFile, Yaml::PARSE_OBJECT_FOR_MAP);
+    return yamlParseHelper($parsedToObject);
 }
 
 function parseFile(string $pathToFile): array
@@ -30,6 +36,6 @@ function parseFile(string $pathToFile): array
     } elseif (getExtension($pathToFile) === 'yaml' || 'yml') {
         return yamlParse($pathToFile);
     } else {
-        throwException("{$pathToFile} file is not parsable");
+        throw new \Exception("{$pathToFile} invalid extension");
     }
 }

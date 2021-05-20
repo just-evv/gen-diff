@@ -6,11 +6,14 @@ namespace Gendiff\Gendiff;
 
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
+
 if (file_exists($autoloadPath1)) {
-    require_once $autoloadPath1;
+    include_once $autoloadPath1;
 } else {
-    require_once $autoloadPath2;
+    include_once $autoloadPath2;
 }
+
+use function Gendiff\Compare\compareFiles;
 
 function formatValue($value): string
 {
@@ -24,7 +27,7 @@ function formatOutput($marker, $key, $value): string
 {
     return '  ' . $marker . $key . ' = ' . formatValue($value);
 }
-
+/*
 function compareFiles($key, $array1, $array2): string
 {
     $onlyInFirst = '- ';
@@ -44,16 +47,16 @@ function compareFiles($key, $array1, $array2): string
         return  formatOutput($onlyInSecond, $key, $array2[$key]);
     }
 }
-
+*/
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish')
 {
     $file1 = parseFile($pathToFile1);
     $file2 = parseFile($pathToFile2);
 
-    $keys = array_keys(array_merge($file1, $file2));
-    sort($keys);
+    //$keys = array_keys(array_merge($file1, $file2));
+    //sort($keys);
 
-    $result = array_map(fn($key) => compareFiles($key, $file1, $file2), $keys);
+    $result = array_map(fn($key) => compareFiles($file1, $file2), $keys);
     return "{\n" . implode("\n", $result) . "\n}\n";
 }

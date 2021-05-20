@@ -21,11 +21,11 @@
     },
     "scripts": {
         "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
         "test": "phpunit tests"
 
     },
     "autoload": {
-
         "files": [
             "vendor/docopt/docopt/src/docopt.php",
             "src/Gendiff.php",
