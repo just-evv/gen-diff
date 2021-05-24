@@ -31,6 +31,6 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: CODE_CLIMATE_SECRET
         with:
-          coverageCommand: npm run coverage
+          coverageCommand: make test
 
      
