@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\Gendiff;
+namespace Gendiff\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 

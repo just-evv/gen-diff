@@ -21,36 +21,60 @@ class GendiffTest extends TestCase
         $this->assertEquals($result3, compareFiles('timeout', $file1, $file2));
     }
 
-    public function testJsonParse()
+    public function testGenDiff()
     {
-        $pathToFile = 'fixtures/nested/json/file1.json';
-        $absolutePathToFile = getcwd() . '/' . $pathToFile;
+        $pathToFile1 = 'fixtures/nested/json/file1.json';
+        $pathToFile2 = 'fixtures/nested/json/file2.json';
 
-        $result1 = jsonParse($pathToFile);
-        $result2 = jsonParse($absolutePathToFile);
-
-        $this->assertIsArray($result1);
-        $this->assertIsArray($result2);
+        //$expected = file_get_contents('fixtures/nested/output');
+        $expected = <<<'EOD'
+{
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
     }
-
-    public function testYamlParse()
-    {
-        $pathToFile = 'fixtures/nested/yaml/file1.yaml';
-        $absolutePathToFile = getcwd() . '/' . $pathToFile;
-        $result2 = yamlParse($absolutePathToFile);
-        $result1 = yamlParse($pathToFile);
-        $this->assertIsArray($result1);
-        $this->assertIsArray($result2);
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
     }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
+}
+EOD;
+        $actual = genDiff($pathToFile1, $pathToFile2);
 
-    public function testParseFile()
-    {
-        $pathToFileYaml = 'fixtures/nested/yaml/file1.yaml';
-        $pathToFileJson = 'fixtures/nested/json/file1.json';
-
-        $parsedYaml = parseFile($pathToFileYaml);
-        $parsedJson = parseFile($pathToFileJson);
-
-        $this-> assertEquals($parsedYaml, $parsedJson);
+        $this->assertEquals($expected, $actual);
     }
 }

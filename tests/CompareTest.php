@@ -77,9 +77,9 @@ class CompareTest extends TestCase
             'setting1' => 'value 2']
         ];
 
-        $result2 = ['  common' => [
-            '- setting1' => 'value 1',
-            '+ setting1' => 'value 2'
+        $result2 = ['    common' => [
+            '  - setting1' => 'value 1',
+            '  + setting1' => 'value 2'
         ]];
         print_r(compareFiles($nested1, $nested2));
 

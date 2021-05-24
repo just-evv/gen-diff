@@ -4,24 +4,9 @@ declare(strict_types=1);
 
 namespace Gendiff\Gendiff;
 
-$autoloadPath1 = __DIR__ . '/../../../autoload.php';
-$autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
-
-if (file_exists($autoloadPath1)) {
-    include_once $autoloadPath1;
-} else {
-    include_once $autoloadPath2;
-}
-
+use function Gendiff\Parsers\parseFile;
 use function Gendiff\Compare\compareFiles;
-
-function formatValue($value): string
-{
-    if (gettype($value) !== "string") {
-        return json_encode($value);
-    }
-    return $value;
-}
+use function Gendiff\Formatter\stylish;
 
 function formatOutput($marker, $key, $value): string
 {
@@ -54,9 +39,7 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     $file1 = parseFile($pathToFile1);
     $file2 = parseFile($pathToFile2);
 
-    //$keys = array_keys(array_merge($file1, $file2));
-    //sort($keys);
+    $diff = compareFiles($file1, $file2);
 
-    $result = array_map(fn($key) => compareFiles($file1, $file2), $keys);
-    return "{\n" . implode("\n", $result) . "\n}\n";
+    return stylish($diff);
 }
