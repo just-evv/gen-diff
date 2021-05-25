@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gendiff\Gendiff;
 
 use function Gendiff\Parsers\parseFile;
-use function Gendiff\Compare\compareFiles;
+use function Gendiff\CompareFiles\compareFiles;
 use function Gendiff\Formatter\stylish;
 
 function formatOutput($marker, $key, $value): string

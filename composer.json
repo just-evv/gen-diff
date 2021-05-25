@@ -31,7 +31,9 @@
             "src/Gendiff.php",
             "src/Parsers.php",
             "src/Compare.php",
-            "src/Formatter.php"
+            "src/Formatter.php",
+            "src/CompreFiles.php",
+            "src/DiffNode.php"
         ]
     },
     "bin": [

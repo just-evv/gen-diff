@@ -6,14 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class FormatterTest extends TestCase
 {
-    public function testSpacer()
-    {
-        $array = ['key' => 'value', 'key 2' => ['key 3' => 'value 3']];
-        $expected = ['  key' => 'value', '  key 2' => ['    key 3' => 'value 3']];
-
-        $this->assertEquals($expected, spacer($array));
-    }
-
     public function testStylish()
     {
         $array = ['key' => 'value', 'key 2' => ['key 3' => false]];
@@ -27,6 +19,28 @@ class FormatterTest extends TestCase
 }
 EOD;
 
+        $this->assertEquals($expected, stylish($array));
+    }
+
+    public function testStylish2()
+    {
+        $array = ['common' => [
+            'before' => [],
+            'after' => [],
+            'noChanges' =>
+                ['setting1' =>
+                    ['before' => [], 'after' => [], 'noChanges' => 'value 1']
+                ]
+
+        ]
+        ];
+        $expected = <<<'EOD'
+{
+    common: {
+        setting1: value 1
+    }
+}
+EOD;
         $this->assertEquals($expected, stylish($array));
     }
 }

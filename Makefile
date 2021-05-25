@@ -12,3 +12,6 @@ lint-fix:
 
 gendiff:
 	./bin/gendiff
+
+test:
+	composer run-script test

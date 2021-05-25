@@ -4,21 +4,9 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter;
 
-function spacer($node, $depth = 1)
-{
-    $identation = '  ';
-    $currentIdentation = str_repeat($identation, $depth);
-
-    $result = [];
-
-    foreach ($node as $key => $value) {
-        $newKey = $currentIdentation . $key;
-        $newValue = is_array($value) ? spacer($value, $depth + 1) : $value;
-        $result[$newKey] = $newValue;
-    }
-
-    return $result;
-}
+use function Gendiff\CompareFiles\getAfter;
+use function Gendiff\CompareFiles\getBefore;
+use function Gendiff\CompareFiles\getNoChanges;
 
 function formatValue($value): string
 {
@@ -28,26 +16,58 @@ function formatValue($value): string
     return $value;
 }
 
-
-function stylish(array $node, $depth = 2): string
+function renderValue($node, $depth): string
 {
-    $result = '';
-    $identation = '  ';
-    $currentIdentation = str_repeat($identation, $depth);
+    $result = "{\n";
+    $identation = '    ';
+    $prefixIdentation = str_repeat($identation, $depth);
 
     foreach ($node as $key => $value) {
-        $newKey = $currentIdentation . $key;
+        $result .= $prefixIdentation . $identation . $key . ': ';
+        $result .= is_array($value) ? renderValue($value, $depth + 1) : formatValue($value);
+        $result .= "\n";
+    }
+    return $result . $prefixIdentation . '}';
+}
 
-        $newValue = is_array($value) ? stylish($value, $depth + 1) : formatValue($value);
+function isValueSet($value): bool
+{
+    return $value !== [];
+}
 
-        $currentString = $newKey . ': ';
+function stylish(array $node, $depth = 0): string
+{
+    $result = "{\n";
+    $identation = '    ';
+    $beforeId = '  - ';
+    $afterId = '  + ';
 
-        if (is_array($value)) {
-            $currentString .= $newValue . "\n";
+    $prefixIdentation = str_repeat($identation, $depth);
+
+    foreach ($node as $key => $value) {
+        $noChangesValue = getNoChanges($value);
+
+        if (isValueSet($noChangesValue)) {
+            $result .= $prefixIdentation . $identation . $key . ': ';
+            $result .= is_array($noChangesValue) ? stylish($noChangesValue, $depth + 1) : formatValue($noChangesValue);
         } else {
-            $currentString .= formatValue($value) . "\n";
+            $beforeValue = getBefore($value);
+            $afterValue = getAfter($value);
+
+            if (isValueSet($beforeValue)) {
+                $result .= $prefixIdentation . $beforeId . $key . ': ';
+                $result .= is_array($beforeValue) ? renderValue($beforeValue, $depth + 1) : formatValue($beforeValue);
+            }
+
+            if (isValueSet($afterValue)) {
+                if (isValueSet($beforeValue)) {
+                    $result .= "\n";
+                }
+                $result .= $prefixIdentation . $afterId . $key . ': ';
+                $result .= is_array($afterValue) ? renderValue($afterValue, $depth + 1) : formatValue($afterValue);
+            }
         }
-        $result .= $currentString;
+        $result .= "\n";
     };
-    return "{\n" . $result . str_repeat($identation, $depth - 2) . '}';
+    return $result . $prefixIdentation . '}';
 }
