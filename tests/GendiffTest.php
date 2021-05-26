@@ -57,7 +57,7 @@ class GendiffTest extends TestCase
     }
 }
 EOD;
-        $actual = genDiff($pathToFile1, $pathToFile2);
+        $actual = genDiff($pathToFile1, $pathToFile2, $formatName);
 
         $this->assertEquals($expected, $actual);
     }

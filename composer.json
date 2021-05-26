@@ -30,9 +30,11 @@
             "vendor/docopt/docopt/src/docopt.php",
             "src/Gendiff.php",
             "src/Parsers.php",
-            "src/Formatter.php",
             "src/CompareFiles.php",
-            "src/DiffNode.php"
+            "src/DiffNode.php",
+            "src/Formatter.php",
+            "src/Formatters/Stylish.php",
+            "src/Formatters/Plain.php"
         ]
     },
     "bin": [

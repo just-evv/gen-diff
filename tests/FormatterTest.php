@@ -1,6 +1,6 @@
 <?php
 
-namespace Gendiff\Formatter;
+namespace Gendiff\Formatter\Stylish;
 
 use PHPUnit\Framework\TestCase;
 
