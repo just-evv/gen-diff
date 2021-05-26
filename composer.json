@@ -30,9 +30,8 @@
             "vendor/docopt/docopt/src/docopt.php",
             "src/Gendiff.php",
             "src/Parsers.php",
-            "src/Compare.php",
             "src/Formatter.php",
-            "src/CompreFiles.php",
+            "src/CompareFiles.php",
             "src/DiffNode.php"
         ]
     },
