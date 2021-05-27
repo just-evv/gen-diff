@@ -38,3 +38,8 @@ function getNoChanges($node)
 {
     return $node['noChanges'];
 }
+
+function isValueSet($value): bool
+{
+    return $value !== [];
+}

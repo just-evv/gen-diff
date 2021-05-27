@@ -4,7 +4,7 @@ namespace Gendiff\Formatter\Stylish;
 
 use PHPUnit\Framework\TestCase;
 
-class FormatterTest extends TestCase
+class StylishTest extends TestCase
 {
     public function testStylish()
     {

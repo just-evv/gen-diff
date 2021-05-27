@@ -10,5 +10,6 @@ use function Gendiff\CompareFiles\getNoChanges;
 
 function plain($array): string
 {
+
     return 'you chose plain';
 }
