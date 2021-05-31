@@ -26,6 +26,9 @@
 
     },
     "autoload": {
+        "psr-4": {
+            "Hexlet\\Code\\Tests\\": "tests"
+        },
         "files": [
             "vendor/docopt/docopt/src/docopt.php",
             "src/Gendiff.php",
@@ -34,7 +37,8 @@
             "src/DiffNode.php",
             "src/Formatter.php",
             "src/Formatters/Stylish.php",
-            "src/Formatters/Plain.php"
+            "src/Formatters/Plain.php",
+            "src/Formatters/Json.php"
         ]
     },
     "bin": [

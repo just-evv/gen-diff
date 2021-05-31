@@ -1,11 +1,32 @@
 <?php
 
-namespace Gendiff\Gendiff;
+namespace Hexlet\Code\Tests;
 
 use PHPUnit\Framework\TestCase;
 
+use function Gendiff\Gendiff\genDiff;
+
 class GendiffTest extends TestCase
 {
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function testGenDiff3()
+    {
+
+        $pathToFile1 = 'fixtures/nested/json/file1.json';
+        $pathToFile2 = 'fixtures/nested/json/file2.json';
+        $formatName = 'json';
+        $actual = genDiff($pathToFile1, $pathToFile2, $formatName);
+
+        $expected = '';
+        $this->assertEquals($expected, $actual);
+
+    }
+    /**
+     * @codeCoverageIgnore
+     */
     public function testGenDiff2()
     {
         $pathToFile1 = 'fixtures/nested/json/file1.json';
@@ -30,6 +51,9 @@ EOD;
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @covers \Gendiff\Gendiff\genDiff
+     */
     public function testGenDiff1()
     {
         $pathToFile1 = 'fixtures/nested/json/file1.json';

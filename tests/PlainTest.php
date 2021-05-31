@@ -3,7 +3,9 @@
 namespace Gendiff\Formatter\Plain;
 
 use PHPUnit\Framework\TestCase;
-
+/**
+ * @codeCoverageIgnore
+ */
 class PlainTest extends TestCase
 {
     public function testPlainFlat()

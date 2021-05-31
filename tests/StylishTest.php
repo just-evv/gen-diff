@@ -3,7 +3,9 @@
 namespace Gendiff\Formatter\Stylish;
 
 use PHPUnit\Framework\TestCase;
-
+/**
+ * @codeCoverageIgnore
+ */
 class StylishTest extends TestCase
 {
     public function testStylish()

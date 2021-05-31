@@ -3,7 +3,9 @@
 namespace Gendiff\Parsers;
 
 use PHPUnit\Framework\TestCase;
-
+/**
+ * @codeCoverageIgnore
+ */
 class ParsersTest extends TestCase
 {
     public function testJsonParse()

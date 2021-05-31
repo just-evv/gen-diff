@@ -15,3 +15,6 @@ gendiff:
 
 test:
 	composer run-script test
+
+test-coverage:
+ 	export XDEBUG_MODE=coverage; vendor/bin/phpunit --coverage-clover coverage.xml tests

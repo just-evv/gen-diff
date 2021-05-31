@@ -4,6 +4,9 @@ namespace Gendiff\CompareFiles;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CompareFilesTest extends TestCase
 {
     public function testCompareFilesWithInner1()
