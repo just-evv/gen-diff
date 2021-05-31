@@ -4,11 +4,12 @@ namespace Gendiff\CompareFiles;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @codeCoverageIgnore
- */
+
 class CompareFilesTest extends TestCase
 {
+    /**
+     * @covers \Gendiff\CompareFiles\compareFiles
+     */
     public function testCompareFilesWithInner1()
     {
         $nested1 = ['common' => [
@@ -32,7 +33,9 @@ class CompareFilesTest extends TestCase
 
         $this->assertEquals($result1, compareFiles($nested1, $nested2));
     }
-
+    /**
+     * @covers \Gendiff\CompareFiles\compareFiles
+     */
     public function testCompareFiles()
     {
         $file1 = ['follow' => 'false', 'timeout' => 50, 'port' => '25.35.45'];
