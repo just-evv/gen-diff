@@ -9,6 +9,8 @@ class CompareFilesTest extends TestCase
 {
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
+     * @covers \Gendiff\CompareFiles\createNode
+     * @covers \Gendiff\CompareFiles\setNoChanges
      */
     public function testCompareFilesWithInner1()
     {
@@ -35,6 +37,10 @@ class CompareFilesTest extends TestCase
     }
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
+     * @covers \Gendiff\CompareFiles\createNode
+     * @covers \Gendiff\CompareFiles\setNoChanges
+     * @covers \Gendiff\CompareFiles\setAfter
+     * @covers \Gendiff\CompareFiles\setBefore
      */
     public function testCompareFiles()
     {
