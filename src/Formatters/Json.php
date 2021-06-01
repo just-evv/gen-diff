@@ -9,7 +9,8 @@ use function Gendiff\CompareFiles\getBefore;
 use function Gendiff\CompareFiles\getNoChanges;
 use function Gendiff\CompareFiles\isValueSet;
 
-function json($array): string
+
+function jsonHelper($array): array
 {
     $result = [];
 
@@ -17,7 +18,7 @@ function json($array): string
         $newValue = getNoChanges($value);
 
         if (isValueSet($newValue)){
-            $result[$key] = is_array($newValue) ? json($newValue) : $newValue;
+            $result[$key] = is_array($newValue) ? jsonHelper($newValue) : $newValue;
         };
         $valueBefore = getBefore($value);
         $valueAfter = getAfter($value);
@@ -30,5 +31,10 @@ function json($array): string
         }
     }
     print_r($result);
-    return json_encode($result);
+    return $result;
+}
+
+function json($array): string
+{
+    return json_encode(jsonHelper($array));
 }
