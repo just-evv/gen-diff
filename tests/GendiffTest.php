@@ -26,6 +26,20 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Formatter\Stylish\stylish
+     * @covers \Gendiff\CompareFiles\getAfter
+     * @covers \Gendiff\CompareFiles\getBefore
+     * @covers \Gendiff\CompareFiles\getNoChanges
+     * @covers \Gendiff\CompareFiles\isValueSet
+     * @covers \Gendiff\Formatter\Json\json
+     * @covers \Gendiff\Formatter\Json\jsonHelper
+     * @covers \Gendiff\Formatter\Plain\checkValue
+     * @covers \Gendiff\Formatter\Plain\formatValue
+     * @covers \Gendiff\Formatter\Plain\plain
+     * @covers \Gendiff\Formatter\Stylish\formatValue
+     * @covers \Gendiff\Formatter\Stylish\renderValue
+     * @covers \Gendiff\Gendiff\genDiff
+     * @covers \Gendiff\Parsers\getExtension
+     * @covers \Gendiff\Parsers\jsonParse
      */
     public function testGenDiff1()
     {
