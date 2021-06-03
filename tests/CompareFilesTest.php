@@ -4,7 +4,6 @@ namespace Gendiff\CompareFiles;
 
 use PHPUnit\Framework\TestCase;
 
-
 class CompareFilesTest extends TestCase
 {
     /**

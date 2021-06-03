@@ -14,7 +14,7 @@ function formatter(array $file, string $formatName): string
         return plain($file);
     } elseif ($formatName === 'json') {
         return json($file);
-    }else {
+    } else {
         return stylish($file);
     }
 }
