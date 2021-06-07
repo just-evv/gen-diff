@@ -34,5 +34,5 @@ function jsonHelper($array): array
 
 function json($array): string
 {
-    return json_encode(jsonHelper($array)) . "\n";
+    return json_encode(jsonHelper($array));
 }
