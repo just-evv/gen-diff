@@ -10,13 +10,13 @@
 The utility accepts files in ```.yaml``` and ```.json``` formats.
 
 Styles of the generated report:
-* plain text 
-* stylish 
-* json 
+* plain text [Demonstartion](https://asciinema.org/a/2o4KoirrLGbHfV6388GLLl0PP)
+* stylish [Demonstartion](https://asciinema.org/a/sLreVezdai6j14PPVSLzg2tmI)
+* json [Demonstartion](https://asciinema.org/a/mgSKd7hs6BgpsfLBc1laGgKGM)
 
 ### Installation
 After cloning the repository use
 ```
 make install
 ```
-for installation the package (example)
+for installation the package. [Demonstartion](https://asciinema.org/a/trTo3XeKayFlHyt4ejY9T7q0Y?speed=3)
