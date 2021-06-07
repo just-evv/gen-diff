@@ -18,7 +18,7 @@ class GendiffTest extends TestCase
     }
 
     /**
-     * @covers \Gendiff\DiffNode\compareFiles
+     * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
      * @covers \Gendiff\DiffNode\setNoChanges
      * @covers \Gendiff\DiffNode\setAfter
@@ -121,7 +121,7 @@ EOD;
         $this->assertEquals($expected3, $actual3);
     }
     /**
-     * @covers \Gendiff\DiffNode\compareFiles
+     * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
      * @covers \Gendiff\DiffNode\setNoChanges
      * @covers \Gendiff\DiffNode\setAfter
