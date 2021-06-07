@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\Gendiff;
+namespace Differ\Differ;
 
 use function Gendiff\Parsers\parseFile;
 use function Gendiff\CompareFiles\compareFiles;
