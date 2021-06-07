@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\CompareFiles;
+namespace Gendiff\DiffNode;
 
 function createNode(): array
 {

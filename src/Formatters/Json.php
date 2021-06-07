@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Json;
 
-use function Gendiff\CompareFiles\getAfter;
-use function Gendiff\CompareFiles\getBefore;
-use function Gendiff\CompareFiles\getNoChanges;
-use function Gendiff\CompareFiles\isValueSet;
+use function Gendiff\DiffNode\getAfter;
+use function Gendiff\DiffNode\getBefore;
+use function Gendiff\DiffNode\getNoChanges;
+use function Gendiff\DiffNode\isValueSet;
 
 function jsonHelper($array): array
 {

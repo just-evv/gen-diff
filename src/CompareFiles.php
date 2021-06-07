@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Gendiff\CompareFiles;
 
+use function Gendiff\DiffNode\createNode;
+use function Gendiff\DiffNode\setNoChanges;
+use function Gendiff\DiffNode\setBefore;
+use function Gendiff\DiffNode\setAfter;
+
 function compareFiles(array $file1, array $file2): array
 {
     $keys1 = array_keys($file1);
