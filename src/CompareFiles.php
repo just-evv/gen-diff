@@ -20,25 +20,20 @@ function compareFiles(array $file1, array $file2): array
     $allKeys = sort($merged, fn ($left, $right) => strcmp($left, $right));
 
     $result = array_map(function ($key) use ($file1, $file2) {
-        //$currentNode = createNode();
-        $noChanges = $before = $after = [];
         if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
             if (is_array($file1[$key]) && is_array($file2[$key])) {
-                $noChanges = compareFiles($file1[$key], $file2[$key]);
+                return createNode(compareFiles($file1[$key], $file2[$key]), [], []);
             } elseif ($file1[$key] === $file2[$key]) {
-                $noChanges = $file1[$key];
+                return createNode($file1[$key], [], []);
             } else {
-                $before = $file1[$key];
-                $after = $file2[$key];
+                return createNode([], $file1[$key], $file2[$key]);
             }
         } elseif (array_key_exists($key, $file1)) {
-            $before = $file1[$key];
+            return createNode([], $file1[$key], []);
         } elseif (array_key_exists($key, $file2)) {
-            $after = $file2[$key];
+            return createNode([], [], $file2[$key]);
         };
-
-        //$acc[$key] = createNode($noChanges, $before, $after);
-        return createNode($noChanges, $before, $after);
+        return [];
     }, $allKeys);
 
     //print_r(array_combine($allKeys, $result));
