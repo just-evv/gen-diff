@@ -19,7 +19,7 @@ function compareFiles(array $file1, array $file2): array
 
     $allKeys = sort($merged, fn ($left, $right) => strcmp($left, $right));
 
-    $result = array_reduce($allKeys, function ($acc, $key) use ($file1, $file2) {
+    $result = array_map(function ($key) use ($file1, $file2) {
         //$currentNode = createNode();
         $noChanges = $before = $after = [];
         if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
@@ -37,13 +37,13 @@ function compareFiles(array $file1, array $file2): array
             $after = $file2[$key];
         };
 
-        $acc[$key] = createNode($noChanges, $before, $after);
-        return $acc;
-    }, []);
+        //$acc[$key] = createNode($noChanges, $before, $after);
+        return createNode($noChanges, $before, $after);
+    }, $allKeys);
 
-    //print_r($result);
+    //print_r(array_combine($allKeys, $result));
 
-    return $result;
+    return array_combine($allKeys, $result);
 /*
     return array_reduce($allKeys, function ($acc, $key) use ($file1, $file2) {
         $currentNode = createNode();
