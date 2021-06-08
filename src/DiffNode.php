@@ -27,17 +27,17 @@ function setNoChanges($node, $value): array
     return $node;
 }
 
-function getBefore($node): mixed
+function getBefore($node)
 {
     return $node['before'];
 }
 
-function getAfter($node): mixed
+function getAfter($node)
 {
     return $node['after'];
 }
 
-function getNoChanges($node): mixed
+function getNoChanges($node)
 {
     return $node['noChanges'];
 }
