@@ -36,8 +36,6 @@ function compareFiles(array $file1, array $file2): array
         return [];
     }, $allKeys);
 
-    //print_r(array_combine($allKeys, $result));
-
     return array_combine($allKeys, $result);
 /*
     return array_reduce($allKeys, function ($acc, $key) use ($file1, $file2) {
