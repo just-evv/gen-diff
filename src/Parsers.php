@@ -11,9 +11,12 @@ function getExtension(string $pathToFile): string
     return pathinfo($pathToFile, PATHINFO_EXTENSION);
 }
 
-function jsonParse($pathToFile): array
+function jsonParse(string $pathToFile): array
 {
     $file = file_get_contents($pathToFile);
+    if ($file === false) {
+        throw new \Exception("{$pathToFile} failed to get content");
+    };
     return json_decode($file, true);
 }
 
@@ -33,7 +36,7 @@ function parseFile(string $pathToFile): array
 {
     if (getExtension($pathToFile) === 'json') {
         return jsonParse($pathToFile);
-    } elseif (getExtension($pathToFile) === 'yaml' || 'yml') {
+    } elseif (in_array(getExtension($pathToFile), ['yaml', 'yml'])) {
         return yamlParse($pathToFile);
     } else {
         throw new \Exception("{$pathToFile} invalid extension");

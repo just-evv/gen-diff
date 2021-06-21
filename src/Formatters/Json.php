@@ -11,6 +11,7 @@ use function Gendiff\DiffNode\isValueSet;
 
 function jsonHelper($array): array
 {
+
     $result = [];
 
     foreach ($array as $key => $value) {
