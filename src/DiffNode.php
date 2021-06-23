@@ -1,35 +1,17 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Gendiff\DiffNode;
 
-//function createNode(): array
-//{
-//    return ['before' => [], 'after' => [], 'noChanges' => []];
-//}
-
-function createNode($noChanges, $before, $after): array
+function createNode($name, $noChanges, $before = [], $after = []): array
 {
-    return ['before' => $before, 'after' => $after, 'noChanges' => $noChanges];
+    return ['name' => $name, 'noChanges' => $noChanges, 'before' => $before, 'after' => $after];
 }
 
-function setBefore($node, $value): array
+function getName(array $node): string
 {
-    $node['before'] = $value;
-    return $node;
-}
-
-function setAfter($node, $value): array
-{
-    $node['after'] = $value;
-    return $node;
-}
-
-function setNoChanges($node, $value): array
-{
-    $node['noChanges'] = $value;
-    return $node;
+    return $node['name'];
 }
 
 function getBefore($node)

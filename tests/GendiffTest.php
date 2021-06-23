@@ -17,6 +17,18 @@ class GendiffTest extends TestCase
         $this->pathToFile2 = '';
     }
 
+    public function testJson()
+    {
+        $this->pathToFile1 = __DIR__ . '/fixtures/nested/json/file1.json';
+        $this->pathToFile2 = __DIR__ . '/fixtures/nested/json/file2.json';
+
+        $expected3 = file_get_contents(__DIR__ . '/fixtures/nested/output_json.json');
+        $formatName2 = 'json';
+        $actual3 = genDiff($this->pathToFile1, $this->pathToFile2, $formatName2);
+
+        $this->assertEquals($expected3, $actual3);
+    }
+
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
