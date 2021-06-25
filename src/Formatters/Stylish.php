@@ -15,7 +15,7 @@ function formatValue($value): string
     return $value;
 }
 
-function makeString(int $depth, string $name, string $value, string $type = 'string',string $id = '    '): string
+function makeString(int $depth, string $name, string $value, string $type = 'string', string $id = '    '): string
 {
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
@@ -25,21 +25,7 @@ function makeString(int $depth, string $name, string $value, string $type = 'str
     }
     return $prefixIndentation . $id . $name . ': ' . $value;
 }
-/*
-function makePrefix(int $depth, string $name, string $value, string $id = '    '): string
-{
-    $indentation = '    ';
-    $prefixIndentation = str_repeat($indentation, $depth);
-    return $prefixIndentation . $id . $name . ': ' . $value;
-}
 
-function formatForArray(int $depth, string $name, string $value, string $id = '    '): string
-{
-    $indentation = '    ';
-    $prefixIndentation = str_repeat($indentation, $depth);
-    return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
-}
-*/
 function formatArray(array $value, int $depth): string
 {
     $valueKeys = array_keys($value);
