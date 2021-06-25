@@ -23,7 +23,7 @@ function checkValue($value): string
 
 function plain(array $tree, array $rootPath = []): string
 {
-    $result =  array_map(function ($node) use ($rootPath) {
+    $result =  array_map(function ($node) use ($rootPath): string {
         $rootPath[] = getName($node);
         $noChanges = $node['noChanges'];
         if (isValueSet($noChanges) && is_array($noChanges)) {
