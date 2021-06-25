@@ -20,19 +20,23 @@ class GendiffTest extends TestCase
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
+     * @covers \Gendiff\DiffNode\getName
+     * @covers \Gendiff\DiffNode\isValueSet
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
+     * @covers \Gendiff\Parsers\getExtension
+     * @covers \Gendiff\Parsers\jsonParse
      * @covers \Gendiff\Formatter\Stylish\stylish
-     * @covers \Gendiff\DiffNode\isValueSet
+     * @covers \Gendiff\Formatter\Stylish\formatValue
+     * @covers \Gendiff\Formatter\Stylish\formatArray
+     * @covers \Gendiff\Formatter\Stylish\makeString
+     * @covers \Gendiff\Formatter\Stylish\strylishHelper
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Json\jsonHelper
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
-     * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Differ\Differ\genDiff
-     * @covers \Gendiff\Parsers\getExtension
-     * @covers \Gendiff\Parsers\jsonParse
      */
     public function testGenDiffJson()
     {
@@ -116,18 +120,22 @@ EOD;
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
+     * @covers \Gendiff\DiffNode\getName
+     * @covers \Gendiff\DiffNode\isValueSet
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
+     * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Formatter\Stylish\stylish
-     * @covers \Gendiff\DiffNode\isValueSet
+     * @covers \Gendiff\Formatter\Stylish\formatValue
+     * @covers \Gendiff\Formatter\Stylish\formatArray
+     * @covers \Gendiff\Formatter\Stylish\makeString
+     * @covers \Gendiff\Formatter\Stylish\strylishHelper
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Json\jsonHelper
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
-     * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Differ\Differ\genDiff
-     * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Parsers\yamlParse
      * @covers \Gendiff\Parsers\yamlParseHelper
      */
