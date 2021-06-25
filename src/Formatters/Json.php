@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Json;
 
+use _HumbugBoxec8571fe8659\Nette\Neon\Exception;
 use function Functional\flatten;
 use function Gendiff\DiffNode\getName;
 use function Gendiff\DiffNode\isValueSet;
+use function PHPUnit\Framework\throwException;
 
 function jsonHelper(array $tree): array
 {
@@ -25,11 +27,16 @@ function jsonHelper(array $tree): array
         } elseif (isValueSet($valueAfter)) {
             return [$name => ['second file' => $valueAfter]];
         };
+        return '';
     }, $tree);
     return array_merge(...$result);
 }
 
 function json(array $tree): string
 {
-    return json_encode(jsonHelper($tree));
+    $result = json_encode(jsonHelper($tree));
+    if ($result === false) {
+        throw new Exception("something went wrong");
+    }
+    return $result;
 }
