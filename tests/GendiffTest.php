@@ -30,7 +30,6 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
      * @covers \Gendiff\Formatter\Stylish\formatValue
-     * @covers \Gendiff\Formatter\Stylish\renderValue
      * @covers \Differ\Differ\genDiff
      * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Parsers\jsonParse
@@ -127,7 +126,6 @@ EOD;
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
      * @covers \Gendiff\Formatter\Stylish\formatValue
-     * @covers \Gendiff\Formatter\Stylish\renderValue
      * @covers \Differ\Differ\genDiff
      * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Parsers\yamlParse
