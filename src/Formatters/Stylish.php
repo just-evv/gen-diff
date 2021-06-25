@@ -15,6 +15,17 @@ function formatValue($value): string
     return $value;
 }
 
+function makeString(int $depth, string $name, string $value, string $type = 'string',string $id = '    '): string
+{
+    $indentation = '    ';
+    $prefixIndentation = str_repeat($indentation, $depth);
+
+    if ($type === 'array') {
+        return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
+    }
+    return $prefixIndentation . $id . $name . ': ' . $value;
+}
+/*
 function makePrefix(int $depth, string $name, string $value, string $id = '    '): string
 {
     $indentation = '    ';
@@ -28,16 +39,16 @@ function formatForArray(int $depth, string $name, string $value, string $id = ' 
     $prefixIndentation = str_repeat($indentation, $depth);
     return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
 }
-
+*/
 function formatArray(array $value, int $depth): string
 {
     $valueKeys = array_keys($value);
     $result =  array_map(function ($key) use ($value, $depth): string {
         if (is_array($value[$key])) {
             $newValue = $value[$key];
-            return formatForArray($depth, $key, formatArray($newValue, $depth + 1));
+            return makeString($depth, $key, formatArray($newValue, $depth + 1), 'array');
         }
-        return makePrefix($depth, $key, formatValue($value[$key]));
+        return makeString($depth, $key, formatValue($value[$key]));
     }, $valueKeys);
     return implode("\n", $result);
 }
@@ -55,31 +66,32 @@ function stylishHelper(array $tree, int $depth = 0): array
                 stylishHelper($noChangesValue, $depth + 1) : formatValue($noChangesValue);
             $tmp = is_array($check) ? implode("\n", $check) : $check;
             return is_array($check) ?
-                formatForArray($depth, $name, $tmp) : makePrefix($depth, $name, $tmp);
+                makeString($depth, $name, $tmp, 'array') : makeString($depth, $name, $tmp);
         }
         $valueBefore = $node['before'];
         $valueAfter = $node['after'];
         if (isValueSet($valueBefore)) {
-            $checkBefore = is_array($valueBefore) ?
-                formatArray($valueBefore, $depth + 1) : formatValue($valueBefore);
+            $checkBefore = is_array($valueBefore)
+                ? formatArray($valueBefore, $depth + 1) : formatValue($valueBefore);
             $resultBefore = is_array($valueBefore)
-                ? formatForArray($depth, $name, $checkBefore, $beforeId)
-                : makePrefix($depth, $name, $checkBefore, $beforeId);
+                ? makeString($depth, $name, $checkBefore, 'array', $beforeId)
+                : makeString($depth, $name, $checkBefore, '', $beforeId);
             if (isValueSet($valueAfter)) {
                 $checkAfter = is_array($valueAfter)
-                    ? formatArray($valueAfter, $depth + 1)
-                    : formatValue($valueAfter);
-                $resultAfter = is_array($valueAfter) ?
-                    formatForArray($depth, $name, $checkAfter, $afterId) : makePrefix($depth, $name, $checkAfter, $afterId);
+                    ? formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
+                $resultAfter = is_array($valueAfter)
+                    ? makeString($depth, $name, $checkAfter, 'array', $afterId)
+                    : makeString($depth, $name, $checkAfter, '', $afterId);
                 return $resultBefore . "\n" . $resultAfter;
             };
             return $resultBefore;
         }
         if (isValueSet($valueAfter)) {
-            $check = is_array($valueAfter) ?
-                formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
-            return is_array($valueAfter) ?
-                formatForArray($depth, $name, $check, $afterId) : makePrefix($depth, $name, $check, $afterId);
+            $check = is_array($valueAfter)
+                ? formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
+            return is_array($valueAfter)
+                ? makeString($depth, $name, $check, 'array', $afterId)
+                : makeString($depth, $name, $check, '', $afterId);
         }
         return '';
     }, $tree);
