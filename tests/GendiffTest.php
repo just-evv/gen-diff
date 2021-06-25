@@ -20,15 +20,9 @@ class GendiffTest extends TestCase
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
-     * @covers \Gendiff\DiffNode\setNoChanges
-     * @covers \Gendiff\DiffNode\setAfter
-     * @covers \Gendiff\DiffNode\setBefore
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Formatter\Stylish\stylish
-     * @covers \Gendiff\DiffNode\getAfter
-     * @covers \Gendiff\DiffNode\getBefore
-     * @covers \Gendiff\DiffNode\getNoChanges
      * @covers \Gendiff\DiffNode\isValueSet
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Json\jsonHelper
@@ -123,15 +117,9 @@ EOD;
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode
-     * @covers \Gendiff\DiffNode\setNoChanges
-     * @covers \Gendiff\DiffNode\setAfter
-     * @covers \Gendiff\DiffNode\setBefore
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Formatter\Stylish\stylish
-     * @covers \Gendiff\DiffNode\getAfter
-     * @covers \Gendiff\DiffNode\getBefore
-     * @covers \Gendiff\DiffNode\getNoChanges
      * @covers \Gendiff\DiffNode\isValueSet
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Json\jsonHelper

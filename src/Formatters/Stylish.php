@@ -42,12 +42,12 @@ function formatArray(array $value, $depth): string
     return implode("\n", $result);
 }
 
-function stylishHelper(array $tree, $depth = 0)
+function stylishHelper(array $tree, $depth = 0): array
 {
     $beforeId = '  - ';
     $afterId = '  + ';
 
-    $result = array_map(function ($node) use ($beforeId, $afterId, $depth) {
+    return array_map(function ($node) use ($beforeId, $afterId, $depth) {
         $noChangesValue = $node['noChanges'];
         $name = getName($node);
         if (isValueSet($noChangesValue)) {
@@ -81,7 +81,6 @@ function stylishHelper(array $tree, $depth = 0)
         }
         return '';
     }, $tree);
-    return $result;
 }
 
 
