@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Gendiff\CompareFiles;
 
 use function Functional\sort;
-
 use function Gendiff\DiffNode\createNode;
 
 function compareFiles(array $file1, array $file2): array
 {
     $keys1 = array_keys($file1);
     $keys2 = array_keys($file2);
-    $merged = array_merge($keys1, $keys2);
+    $merged = array_unique(array_merge($keys1, $keys2));
 
     $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
