@@ -6,10 +6,8 @@ namespace Gendiff\Formatter\Json;
 
 use Exception;
 
-use function Functional\flatten;
 use function Gendiff\DiffNode\getName;
 use function Gendiff\DiffNode\isValueSet;
-use function PHPUnit\Framework\throwException;
 
 function jsonHelper(array $tree): array
 {
@@ -30,7 +28,7 @@ function jsonHelper(array $tree): array
         };
         return '';
     }, $tree);
-    return array_merge(...$result);
+    return array_merge([], ...$result);
 }
 
 function json(array $tree): string
