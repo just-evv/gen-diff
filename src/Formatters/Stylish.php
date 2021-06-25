@@ -15,11 +15,11 @@ function formatValue($value): string
     return $value;
 }
 
-function makePrefix(int $depth, string $name, string $id = '    '): string
+function makePrefix(int $depth, string $name, $value, string $id = '    '): string
 {
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
-    return $prefixIndentation . $id . $name . ': ';
+    return $prefixIndentation . $id . $name . ': ' . $value;
 }
 
 function formatForArray(int $depth, string $name, $value, string $id = '    '): string
@@ -37,7 +37,7 @@ function formatArray(array $value, $depth)
             $newValue = $value[$key];
             return formatForArray($depth, $key, formatArray($newValue, $depth + 1));
         }
-        return makePrefix($depth, $key) . formatValue($value[$key]);
+        return makePrefix($depth, $key, formatValue($value[$key]));
     }, $valueKeys);
     return implode("\n", $result);
 }
@@ -55,7 +55,7 @@ function stylishHelper(array $tree, $depth = 0)
                 stylishHelper($noChangesValue, $depth + 1) : formatValue($noChangesValue);
             $tmp = is_array($check) ? implode("\n", $check) : $check;
             $acc[] = is_array($check) ?
-                formatForArray($depth, $name, $tmp) : makePrefix($depth, $name) . $tmp;
+                formatForArray($depth, $name, $tmp) : makePrefix($depth, $name, $tmp);
         }
          $valueBefore = $node['before'];
         $valueAfter = $node['after'];
@@ -63,13 +63,13 @@ function stylishHelper(array $tree, $depth = 0)
             $check = is_array($valueBefore) ?
                 formatArray($valueBefore, $depth + 1) : formatValue($valueBefore);
             $acc[] = is_array($valueBefore) ?
-                formatForArray($depth, $name, $check, $beforeId) : makePrefix($depth, $name, $beforeId) . $check;
+                formatForArray($depth, $name, $check, $beforeId) : makePrefix($depth, $name, $check, $beforeId);
         }
         if (isValueSet($valueAfter)) {
             $check = is_array($valueAfter) ?
                 formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
             $acc[] = is_array($valueAfter) ?
-                formatForArray($depth, $name, $check, $afterId) : makePrefix($depth, $name, $afterId) . $check;
+                formatForArray($depth, $name, $check, $afterId) : makePrefix($depth, $name, $check, $afterId);
         }
         return $acc;
     }, []);

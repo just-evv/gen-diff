@@ -28,7 +28,7 @@ function jsonHelper(array $tree): array
         };
         return '';
     }, $tree);
-    return array_merge([], ...$result);
+    return array_merge(...$result);
 }
 
 function json(array $tree): string
