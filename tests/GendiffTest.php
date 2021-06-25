@@ -17,41 +17,6 @@ class GendiffTest extends TestCase
         $this->pathToFile2 = '';
     }
 
-    public function testJson()
-    {
-        $this->pathToFile1 = __DIR__ . '/fixtures/nested/json/file1.json';
-        $this->pathToFile2 = __DIR__ . '/fixtures/nested/json/file2.json';
-
-        $expected3 = file_get_contents(__DIR__ . '/fixtures/nested/output_json.json');
-        $formatName2 = 'json';
-        $actual3 = genDiff($this->pathToFile1, $this->pathToFile2, $formatName2);
-
-        $this->assertEquals($expected3, $actual3);
-    }
-
-    public function testPlain()
-    {
-        $this->pathToFile1 = __DIR__ . '/fixtures/nested/json/file1.json';
-        $this->pathToFile2 = __DIR__ . '/fixtures/nested/json/file2.json';
-
-        $expected2 = <<<'EOD'
-Property 'common.follow' was added with value: false
-Property 'common.setting2' was removed
-Property 'common.setting3' was updated. From true to null
-Property 'common.setting4' was added with value: 'blah blah'
-Property 'common.setting5' was added with value: [complex value]
-Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
-Property 'common.setting6.ops' was added with value: 'vops'
-Property 'group1.baz' was updated. From 'bas' to 'bars'
-Property 'group1.nest' was updated. From [complex value] to 'str'
-Property 'group2' was removed
-Property 'group3' was added with value: [complex value]
-EOD;
-        $formatName1 = 'plain';
-        $actual2 = genDiff($this->pathToFile1, $this->pathToFile2, $formatName1);
-        $this->assertEquals($expected2, $actual2);
-    }
-
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
      * @covers \Gendiff\DiffNode\createNode

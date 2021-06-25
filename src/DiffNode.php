@@ -14,6 +14,11 @@ function getName(array $node): string
     return $node['name'];
 }
 
+function isValueSet($value): bool
+{
+    return $value !== [];
+}
+
 function getBefore($node)
 {
     return $node['before'];
@@ -27,9 +32,4 @@ function getAfter($node)
 function getNoChanges($node)
 {
     return $node['noChanges'];
-}
-
-function isValueSet($value): bool
-{
-    return $value !== [];
 }

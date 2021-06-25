@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Json;
 
-use function Gendiff\DiffNode\getAfter;
-use function Gendiff\DiffNode\getBefore;
 use function Gendiff\DiffNode\getName;
-use function Gendiff\DiffNode\getNoChanges;
 use function Gendiff\DiffNode\isValueSet;
 
 function jsonHelper(array $tree): array

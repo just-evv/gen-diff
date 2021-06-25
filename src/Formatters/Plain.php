@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Gendiff\Formatter\Plain;
 
 use function Functional\flatten;
-use function Gendiff\DiffNode\getAfter;
-use function Gendiff\DiffNode\getBefore;
 use function Gendiff\DiffNode\getName;
-use function Gendiff\DiffNode\getNoChanges;
 use function Gendiff\DiffNode\isValueSet;
 
 function formatValue($value): string
@@ -28,7 +25,7 @@ function plain(array $tree, array $rootPath = []): string
 {
     $result =  array_map(function ($node) use ($rootPath) {
         $rootPath[] = getName($node);
-        $noChanges = getNoChanges($node);
+        $noChanges = $node['noChanges'];
         if (isValueSet($noChanges) && is_array($noChanges)) {
             return plain($noChanges, $rootPath);
         }
