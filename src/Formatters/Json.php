@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Json;
 
-use _HumbugBoxec8571fe8659\Nette\Neon\Exception;
+use Exception;
+
 use function Functional\flatten;
 use function Gendiff\DiffNode\getName;
 use function Gendiff\DiffNode\isValueSet;
