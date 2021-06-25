@@ -29,7 +29,7 @@ function formatForArray(int $depth, string $name, $value, string $id = '    '): 
     return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
 }
 
-function formatArray(array $value, $depth)
+function formatArray(array $value, $depth): string
 {
     $valueKeys = array_keys($value);
     $result =  array_map(function ($key) use ($value, $depth) {
@@ -47,39 +47,47 @@ function stylishHelper(array $tree, $depth = 0)
     $beforeId = '  - ';
     $afterId = '  + ';
 
-    $result = array_reduce($tree, function ($acc, $node) use ($beforeId, $afterId, $depth) {
+    $result = array_map(function ($node) use ($beforeId, $afterId, $depth) {
         $noChangesValue = $node['noChanges'];
         $name = getName($node);
         if (isValueSet($noChangesValue)) {
             $check = is_array($noChangesValue) ?
                 stylishHelper($noChangesValue, $depth + 1) : formatValue($noChangesValue);
             $tmp = is_array($check) ? implode("\n", $check) : $check;
-            $acc[] = is_array($check) ?
+            return is_array($check) ?
                 formatForArray($depth, $name, $tmp) : makePrefix($depth, $name, $tmp);
         }
-         $valueBefore = $node['before'];
+        $valueBefore = $node['before'];
         $valueAfter = $node['after'];
         if (isValueSet($valueBefore)) {
-            $check = is_array($valueBefore) ?
+            $checkBefore = is_array($valueBefore) ?
                 formatArray($valueBefore, $depth + 1) : formatValue($valueBefore);
-            $acc[] = is_array($valueBefore) ?
-                formatForArray($depth, $name, $check, $beforeId) : makePrefix($depth, $name, $check, $beforeId);
+            $resultBefore = is_array($valueBefore) ?
+                formatForArray($depth, $name, $checkBefore, $beforeId) : makePrefix($depth, $name, $checkBefore, $beforeId);
+            if (isValueSet($valueAfter)) {
+                $checkAfter = is_array($valueAfter) ?
+                    formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
+                $resultAfter = is_array($valueAfter) ?
+                    formatForArray($depth, $name, $checkAfter, $afterId) : makePrefix($depth, $name, $checkAfter, $afterId);
+                return $resultBefore . "\n" . $resultAfter;
+            };
+            return $resultBefore;
         }
         if (isValueSet($valueAfter)) {
             $check = is_array($valueAfter) ?
                 formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
-            $acc[] = is_array($valueAfter) ?
+            return is_array($valueAfter) ?
                 formatForArray($depth, $name, $check, $afterId) : makePrefix($depth, $name, $check, $afterId);
         }
-        return $acc;
-    }, []);
+        return '';
+    }, $tree);
     return $result;
 }
 
-function stylish(array $array)
+
+function stylish(array $array): string
 {
     $helped = stylishHelper($array);
     $string = implode("\n", $helped);
-    $formatted = "{\n" . $string . "\n}";
-    return $formatted;
+    return "{\n" . $string . "\n}";
 }
