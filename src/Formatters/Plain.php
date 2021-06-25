@@ -21,7 +21,7 @@ function checkValue($value): string
     return is_array($value) ? '[complex value]' : formatValue($value);
 }
 
-function plain(array $tree, $rootPath = null): string
+function plain(array $tree, string $rootPath = null): string
 {
     $result =  array_map(function ($node) use ($rootPath): string {
         $name = getName($node);
