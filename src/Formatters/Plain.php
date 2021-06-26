@@ -12,8 +12,13 @@ function formatValue($value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
+    } elseif (is_null($value)) {
+        return 'null';
+    } elseIf (is_integer($value)) {
+        return (string) $value;
+    } else {
+        return "'$value'";
     }
-    return is_null($value) ? 'null' :  "'$value'";
 }
 
 function checkValue($value): string
