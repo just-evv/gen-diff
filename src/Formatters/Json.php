@@ -26,7 +26,7 @@ function jsonHelper(array $tree): array
         } elseif (isValueSet($valueAfter)) {
             return [$name => ['second file' => $valueAfter]];
         };
-        return '';
+        return [];
     }, $tree);
     return array_merge(...$result);
 }
