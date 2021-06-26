@@ -14,7 +14,7 @@ function formatValue($value): string
         return $value ? 'true' : 'false';
     } elseif (is_null($value)) {
         return 'null';
-    } elseIf (is_integer($value)) {
+    } elseif (is_integer($value)) {
         return (string) $value;
     } else {
         return "'$value'";
