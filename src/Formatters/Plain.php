@@ -10,10 +10,10 @@ use function Gendiff\DiffNode\isValueSet;
 
 function formatValue($value): string
 {
-    if (gettype($value) !== "string") {
-        return json_encode($value);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
-    return "'$value'";
+    return is_null($value) ? 'null' :  "'$value'";
 }
 
 function checkValue($value): string

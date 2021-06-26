@@ -9,10 +9,10 @@ use function Gendiff\DiffNode\isValueSet;
 
 function formatValue($value): string
 {
-    if (gettype($value) !== "string") {
-        return json_encode($value);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
-    return $value;
+    return is_null($value) ? 'null' :  (string) $value;
 }
 
 function makeString(int $depth, string $name, string $value, string $type = 'string', string $id = '    '): string
