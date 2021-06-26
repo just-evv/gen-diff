@@ -11,7 +11,7 @@ use function Gendiff\DiffNode\isValueSet;
 
 function jsonHelper(array $tree): array
 {
-    $result = array_map(function ($node) {
+    $result = array_map(function ($node): array {
         $noChangesValue = $node['noChanges'];
         $name = getName($node);
         if (isValueSet($noChangesValue)) {
