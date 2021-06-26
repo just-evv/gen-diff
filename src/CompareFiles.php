@@ -4,38 +4,31 @@ declare(strict_types=1);
 
 namespace Gendiff\CompareFiles;
 
+use function Functional\sort;
 use function Gendiff\DiffNode\createNode;
-use function Gendiff\DiffNode\setNoChanges;
-use function Gendiff\DiffNode\setBefore;
-use function Gendiff\DiffNode\setAfter;
 
 function compareFiles(array $file1, array $file2): array
 {
     $keys1 = array_keys($file1);
     $keys2 = array_keys($file2);
-    $allKeys = array_merge($keys1, $keys2);
-    sort($allKeys);
+    $merged = array_unique(array_merge($keys1, $keys2));
 
-    $acc = [];
+    $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
-    foreach ($allKeys as $key) {
-        $currentNode = createNode();
-
+    return array_map(function ($key) use ($file1, $file2): array {
         if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
             if (is_array($file1[$key]) && is_array($file2[$key])) {
-                setNoChanges($currentNode, compareFiles($file1[$key], $file2[$key]));
+                return createNode($key, compareFiles($file1[$key], $file2[$key]));
             } elseif ($file1[$key] === $file2[$key]) {
-                setNoChanges($currentNode, $file1[$key]);
+                return createNode($key, $file1[$key]);
             } else {
-                setBefore($currentNode, $file1[$key]);
-                setAfter($currentNode, $file2[$key]);
+                return createNode($key, [], $file1[$key], $file2[$key]);
             }
         } elseif (array_key_exists($key, $file1)) {
-            setBefore($currentNode, $file1[$key]);
+            return createNode($key, [], $file1[$key]);
         } elseif (array_key_exists($key, $file2)) {
-            setAfter($currentNode, $file2[$key]);
+            return createNode($key, [], [], $file2[$key]);
         };
-        $acc[$key] = $currentNode;
-    }
-    return $acc;
+        return [];
+    }, $allKeys);
 }

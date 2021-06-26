@@ -4,26 +4,21 @@ declare(strict_types=1);
 
 namespace Gendiff\DiffNode;
 
-function createNode(): array
+function createNode(string $name, $noChanges, $before = [], $after = []): array
 {
-    return ['before' => [], 'after' => [], 'noChanges' => []];
+    return ['name' => $name, 'noChanges' => $noChanges, 'before' => $before, 'after' => $after];
 }
 
-function setBefore(&$node, $value): void
+function getName(array $node): string
 {
-    $node['before'] = $value;
+    return $node['name'];
 }
 
-function setAfter(&$node, $value): void
+function isValueSet($value): bool
 {
-    $node['after'] = $value;
+    return $value !== [];
 }
-
-function setNoChanges(&$node, $value): void
-{
-    $node['noChanges'] = $value;
-}
-
+/*
 function getBefore($node)
 {
     return $node['before'];
@@ -38,8 +33,4 @@ function getNoChanges($node)
 {
     return $node['noChanges'];
 }
-
-function isValueSet($value): bool
-{
-    return $value !== [];
-}
+*/

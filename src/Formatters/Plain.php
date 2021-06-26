@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Plain;
 
-use function Gendiff\DiffNode\getAfter;
-use function Gendiff\DiffNode\getBefore;
-use function Gendiff\DiffNode\getNoChanges;
+use function Functional\flatten;
+use function Gendiff\DiffNode\getName;
 use function Gendiff\DiffNode\isValueSet;
 
 function formatValue($value): string
 {
-    if (gettype($value) !== "string") {
-        return json_encode($value);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    } elseif (is_null($value)) {
+        return 'null';
+    } elseif (is_integer($value)) {
+        return (string) $value;
+    } else {
+        return "'$value'";
     }
-    return "'$value'";
 }
 
 function checkValue($value): string
@@ -22,29 +26,30 @@ function checkValue($value): string
     return is_array($value) ? '[complex value]' : formatValue($value);
 }
 
-function plain($array, $rootPath = ''): string
+function plain(array $tree, string $rootPath = null): string
 {
-    $result = [];
-
-    foreach ($array as $key => $value) {
-        $path = $rootPath . $key;
-        $noChangesValue = getNoChanges($value);
-        if (isValueSet($noChangesValue) && is_array($noChangesValue)) {
-            $path .= '.';
-            $result[] = plain(getNoChanges($value), $path);
+    $result =  array_map(function ($node) use ($rootPath): string {
+        $name = getName($node);
+        $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
+        $noChanges = $node['noChanges'];
+        if (isValueSet($noChanges) && is_array($noChanges)) {
+            return plain($noChanges, $path);
         }
-        $valueBefore = getBefore($value);
-        $valueAfter = getAfter($value);
+        $valueBefore = $node['before'];
+        $valueAfter = $node['after'];
+        //$path = implode('.', $rootPath);
         if (isValueSet($valueBefore) && isValueSet($valueAfter)) {
             $value1 = checkValue($valueBefore);
             $value2 = checkValue($valueAfter);
-            $result[] = "Property '$path' was updated. From $value1 to $value2";
+            return  "Property '$path' was updated. From $value1 to $value2";
         } elseif (isValueSet($valueBefore)) {
-            $result[] = "Property '$path' was removed";
+            return  "Property '$path' was removed";
         } elseif (isValueSet($valueAfter)) {
             $addedValue = checkValue($valueAfter);
-            $result[] = "Property '$path' was added with value: $addedValue";
-        }
-    }
-    return implode("\n", $result);
+            return  "Property '$path' was added with value: $addedValue";
+        };
+        return '';
+    }, $tree);
+    $filtered = array_filter(flatten($result));
+    return implode("\n", $filtered);
 }

@@ -12,7 +12,8 @@
         "phpstan/phpstan": "^0.12.65",
         "docopt/docopt": "^1.0",
         "ext-json": "*",
-        "symfony/yaml": "^5.2"
+        "symfony/yaml": "^5.2",
+        "lstrojny/functional-php": "^1.17"
     },
     "require-dev": {
         "phpstan/phpstan-phpunit": "^0.12.16",
