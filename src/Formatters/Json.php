@@ -6,32 +6,35 @@ namespace Gendiff\Formatter\Json;
 
 use Exception;
 
-use function Gendiff\DiffNode\getName;
-use function Gendiff\DiffNode\isValueSet;
+use function Gendiff\CompareFiles\getName;
+use function Gendiff\CompareFiles\getType;
+use function Gendiff\CompareFiles\getChildren;
+use function Gendiff\CompareFiles\getValue1;
+use function Gendiff\CompareFiles\getValue2;
 
-function jsonHelper(array $tree): array
+function jsonHelper(array $tree)
 {
-    $result = array_map(function ($node): array {
-        $noChangesValue = $node['noChanges'];
+    $result = array_map(function ($node) {
+
         $name = getName($node);
-        if (isValueSet($noChangesValue)) {
-            return [$name =>  is_array($noChangesValue) ? jsonHelper($noChangesValue) : $noChangesValue];
+        $type = getType($node);
+        $children = getChildren($node);
+
+        if ($type === 'no changes' ) {
+            return [$name => !empty($children) ? jsonHelper($children) : getValue1($node)];
+        } elseif ($type === 'changed') {
+            return [$name => ['first file' => getValue1($node), 'second file' => getValue2($node)]];
+        } elseif ($type === 'removed') {
+            return [$name => ['first file' => getValue1($node)]];
+        } elseif ($type === 'added') {
+            return [$name => ['second file' => getValue1($node)]];
         }
-        $valueBefore = $node['before'];
-        $valueAfter = $node['after'];
-        if (isValueSet($valueBefore) && isValueSet($valueAfter)) {
-            return [$name => ['first file' => $valueBefore, 'second file' => $valueAfter]];
-        } elseif (isValueSet($valueBefore)) {
-            return [$name => ['first file' => $valueBefore]];
-        } elseif (isValueSet($valueAfter)) {
-            return [$name => ['second file' => $valueAfter]];
-        };
         return [];
     }, $tree);
     return array_merge(...$result);
 }
 
-function json(array $tree): string
+function json(array $tree)
 {
     $result = json_encode(jsonHelper($tree));
     if ($result === false) {

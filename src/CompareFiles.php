@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gendiff\CompareFiles;
 
 use function Functional\sort;
-//use function Gendiff\DiffNode\createNode;
 
 function createNode(string $name, array $children = [], string $type = 'no changes', $value1 = '', $value2 = ''): array
 {
@@ -29,12 +28,12 @@ function getChildren(array $node): array
 
 function getValue1(array $node)
 {
-    return $node['value 1'];
+    return $node['value1'];
 }
 
 function getValue2(array $node)
 {
-    return $node['value 2'];
+    return $node['value2'];
 }
 
 function compareFiles(array $file1, array $file2): array
