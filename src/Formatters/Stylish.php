@@ -45,7 +45,7 @@ function stylishCreator(array $tree, int $depth = 0): array
     $removedId = '  - ';
     $addedId = '  + ';
 
-    return array_map(function ($node) use ($removedId, $addedId, $depth) {
+    return array_map(function ($node) use ($removedId, $addedId, $depth): string {
         $name = getName($node);
         $type = getType($node);
         $children = getChildren($node);
@@ -82,9 +82,9 @@ function stylishCreator(array $tree, int $depth = 0): array
     }, $tree);
 }
 
-function stylish(array $array): string
+function stylish(array $tree): string
 {
-    $helped = stylishCreator($array);
-    $string = implode("\n", $helped);
-    return "{\n" . $string . "\n}";
+    $stylishTree = ['{', ...stylishCreator($tree)];
+    $stylishTree[] = '}';
+    return implode("\n", $stylishTree);
 }
