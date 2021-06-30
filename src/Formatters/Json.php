@@ -20,7 +20,7 @@ function jsonHelper(array $tree)
         $type = getType($node);
         $children = getChildren($node);
 
-        if ($type === 'no changes' ) {
+        if ($type === 'no changes') {
             return [$name => !empty($children) ? jsonHelper($children) : getValue1($node)];
         } elseif ($type === 'changed') {
             return [$name => ['first file' => getValue1($node), 'second file' => getValue2($node)]];
