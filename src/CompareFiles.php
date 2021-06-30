@@ -4,38 +4,60 @@ declare(strict_types=1);
 
 namespace Gendiff\CompareFiles;
 
-use function Gendiff\DiffNode\createNode;
-use function Gendiff\DiffNode\setNoChanges;
-use function Gendiff\DiffNode\setBefore;
-use function Gendiff\DiffNode\setAfter;
+use function Functional\sort;
+
+function createNode(string $name, array $children = [], string $type = 'no changes', $value1 = '', $value2 = ''): array
+{
+    return ['name' => $name, 'type' => $type, 'children' => $children, 'value1' => $value1, 'value2' => $value2];
+}
+
+function getName(array $node): string
+{
+    return $node['name'];
+}
+
+function getType(array $node): string
+{
+    return $node['type'];
+}
+
+function getChildren(array $node): array
+{
+    return $node['children'];
+}
+
+function getValue1(array $node)
+{
+    return $node['value 1'];
+}
+
+function getValue2(array $node)
+{
+    return $node['value 2'];
+}
 
 function compareFiles(array $file1, array $file2): array
 {
     $keys1 = array_keys($file1);
     $keys2 = array_keys($file2);
-    $allKeys = array_merge($keys1, $keys2);
-    sort($allKeys);
+    $merged = array_unique(array_merge($keys1, $keys2));
 
-    $acc = [];
+    $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
-    foreach ($allKeys as $key) {
-        $currentNode = createNode();
-
+    return array_map(function ($key) use ($file1, $file2): array {
         if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
             if (is_array($file1[$key]) && is_array($file2[$key])) {
-                setNoChanges($currentNode, compareFiles($file1[$key], $file2[$key]));
+                return createNode($key, compareFiles($file1[$key], $file2[$key]));
             } elseif ($file1[$key] === $file2[$key]) {
-                setNoChanges($currentNode, $file1[$key]);
+                return createNode($key, [], 'no changes', $file1[$key]);
             } else {
-                setBefore($currentNode, $file1[$key]);
-                setAfter($currentNode, $file2[$key]);
+                return createNode($key, [], 'changed', $file1[$key], $file2[$key]);
             }
         } elseif (array_key_exists($key, $file1)) {
-            setBefore($currentNode, $file1[$key]);
+            return createNode($key, [], 'removed', $file1[$key]);
         } elseif (array_key_exists($key, $file2)) {
-            setAfter($currentNode, $file2[$key]);
+            return createNode($key, [], 'added', $file2[$key]);
         };
-        $acc[$key] = $currentNode;
-    }
-    return $acc;
+        return [];
+    }, $allKeys);
 }
