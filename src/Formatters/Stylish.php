@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Stylish;
 
-use function Gendiff\DiffNode\getName;
-use function Gendiff\DiffNode\isValueSet;
+use function Gendiff\CompareFiles\getName;
+use function Gendiff\CompareFiles\getType;
+use function Gendiff\CompareFiles\getChildren;
 
 function formatValue($value): string
 {
@@ -39,54 +40,51 @@ function formatArray(array $value, int $depth): string
     return implode("\n", $result);
 }
 
-function stylishHelper(array $tree, int $depth = 0): array
+function stylishCreator(array $tree, int $depth = 0): array
 {
-    $beforeId = '  - ';
-    $afterId = '  + ';
+    $removedId = '  - ';
+    $addedId = '  + ';
 
-    return array_map(function ($node) use ($beforeId, $afterId, $depth): string {
-        $noChangesValue = $node['noChanges'];
+    return array_map(function ($node) use ($removedId, $addedId, $depth) {
         $name = getName($node);
-        if (isValueSet($noChangesValue)) {
-            $check = is_array($noChangesValue) ?
-                stylishHelper($noChangesValue, $depth + 1) : formatValue($noChangesValue);
-            $tmp = is_array($check) ? implode("\n", $check) : $check;
-            return is_array($check) ?
-                makeString($depth, $name, $tmp, 'array') : makeString($depth, $name, $tmp);
+        $type = getType($node);
+        $children = getChildren($node);
+        if ($type === 'no changes') {
+            $value = !empty($children) ? stylishCreator($children, $depth + 1) : $node['value1'];
+            $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
+            return is_array($value) ? makeString($depth, $name, $valueToString, 'array') : makeString($depth, $name, $value);
         }
-        $valueBefore = $node['before'];
-        $valueAfter = $node['after'];
-        if (isValueSet($valueBefore)) {
-            $checkBefore = is_array($valueBefore)
-                ? formatArray($valueBefore, $depth + 1) : formatValue($valueBefore);
-            $resultBefore = is_array($valueBefore)
-                ? makeString($depth, $name, $checkBefore, 'array', $beforeId)
-                : makeString($depth, $name, $checkBefore, '', $beforeId);
-            if (isValueSet($valueAfter)) {
-                $checkAfter = is_array($valueAfter)
-                    ? formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
-                $resultAfter = is_array($valueAfter)
-                    ? makeString($depth, $name, $checkAfter, 'array', $afterId)
-                    : makeString($depth, $name, $checkAfter, '', $afterId);
-                return $resultBefore . "\n" . $resultAfter;
-            };
-            return $resultBefore;
-        }
-        if (isValueSet($valueAfter)) {
-            $check = is_array($valueAfter)
-                ? formatArray($valueAfter, $depth + 1) : formatValue($valueAfter);
-            return is_array($valueAfter)
-                ? makeString($depth, $name, $check, 'array', $afterId)
-                : makeString($depth, $name, $check, '', $afterId);
+
+        $value = $node['value1'];
+        $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
+
+        if ($type === 'changed') {
+            $value2 = $node['value2'];
+            $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
+
+            $result1 = is_array($value)
+                ? makeString($depth, $name, $valueToString, 'array', $removedId)
+                : makeString($depth, $name, $valueToString, '', $removedId);
+            $result2 = is_array($value2)
+                ? makeString($depth, $name, $valueToString2, 'array', $addedId)
+                : makeString($depth, $name, $valueToString2, '', $addedId);
+            return $result1 . "\n" . $result2;
+        } elseif ($type === 'removed') {
+            return is_array($value)
+                ? makeString($depth, $name, $valueToString, 'array', $removedId)
+                : makeString($depth, $name, $valueToString, '', $removedId);
+        } elseif ($type === 'added') {
+            return is_array($value)
+                ? makeString($depth, $name, $valueToString, 'array', $addedId)
+                : makeString($depth, $name, $valueToString, '', $addedId);
         }
         return '';
     }, $tree);
 }
 
-
 function stylish(array $array): string
 {
-    $helped = stylishHelper($array);
+    $helped = stylishCreator($array);
     $string = implode("\n", $helped);
     return "{\n" . $string . "\n}";
 }
