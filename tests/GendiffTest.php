@@ -19,24 +19,27 @@ class GendiffTest extends TestCase
 
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
-     * @covers \Gendiff\DiffNode\createNode
-     * @covers \Gendiff\DiffNode\getName
-     * @covers \Gendiff\DiffNode\isValueSet
+     * @covers \Gendiff\CompareFiles\createNode
+     * @covers \Gendiff\CompareFiles\createLeaf
+     * @covers \Gendiff\CompareFiles\isNode
+     * @covers \Gendiff\CompareFiles\getName
+     * @covers \Gendiff\CompareFiles\getType
+     * @covers \Gendiff\CompareFiles\getChildren
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
-     * @covers \Gendiff\Parsers\jsonParse
+     * @covers \Gendiff\Parsers\fileGetContent
      * @covers \Gendiff\Formatter\Stylish\stylish
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
-     * @covers \Gendiff\Formatter\Stylish\stylishHelper
+     * @covers \Gendiff\Formatter\Stylish\stylishCreator
      * @covers \Gendiff\Formatter\Json\json
-     * @covers \Gendiff\Formatter\Json\jsonHelper
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
      * @covers \Differ\Differ\genDiff
+     * @covers \Gendiff\Parsers\jsonParse
      */
     public function testGenDiffJson()
     {
@@ -119,19 +122,22 @@ EOD;
     }
     /**
      * @covers \Gendiff\CompareFiles\compareFiles
-     * @covers \Gendiff\DiffNode\createNode
-     * @covers \Gendiff\DiffNode\getName
-     * @covers \Gendiff\DiffNode\isValueSet
+     * @covers \Gendiff\CompareFiles\createNode
+     * @covers \Gendiff\CompareFiles\createLeaf
+     * @covers \Gendiff\CompareFiles\isNode
+     * @covers \Gendiff\CompareFiles\getName
+     * @covers \Gendiff\CompareFiles\getType
+     * @covers \Gendiff\CompareFiles\getChildren
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
+     * @covers \Gendiff\Parsers\fileGetContent
      * @covers \Gendiff\Formatter\Stylish\stylish
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
-     * @covers \Gendiff\Formatter\Stylish\stylishHelper
+     * @covers \Gendiff\Formatter\Stylish\stylishCreator
      * @covers \Gendiff\Formatter\Json\json
-     * @covers \Gendiff\Formatter\Json\jsonHelper
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\plain
