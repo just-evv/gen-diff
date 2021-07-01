@@ -8,6 +8,7 @@ use function Functional\flatten;
 use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
+use function Gendiff\CompareFiles\isNode;
 
 function formatValue($value): string
 {
@@ -33,19 +34,18 @@ function plain(array $tree, string $rootPath = null): string
         $name = getName($node);
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
-        $children = getChildren($node);
         if ($type === 'no changes') {
-            if (!empty($children)) {
-                return plain($children, $path);
+            if (isNode($node)) {
+                return plain(getChildren($node), $path);
             }
         } elseif ($type === 'changed') {
-            $value1 = checkValue($node['value1']);
-            $value2 = checkValue($node['value2']);
+            $value1 = checkValue($node['removed']);
+            $value2 = checkValue($node['added']);
             return  "Property '$path' was updated. From $value1 to $value2";
         } elseif ($type === 'removed') {
             return  "Property '$path' was removed";
         } elseif ($type === 'added') {
-            $addedValue = checkValue($node['value1']);
+            $addedValue = checkValue($node['added']);
             return  "Property '$path' was added with value: $addedValue";
         };
         return '';

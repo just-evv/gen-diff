@@ -7,6 +7,7 @@ namespace Gendiff\Formatter\Stylish;
 use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
+use function Gendiff\CompareFiles\isNode;
 
 function formatValue($value): string
 {
@@ -48,35 +49,44 @@ function stylishCreator(array $tree, int $depth = 0): array
     return array_map(function ($node) use ($removedId, $addedId, $depth): string {
         $name = getName($node);
         $type = getType($node);
-        $children = getChildren($node);
         if ($type === 'no changes') {
-            $value = ($children !== []) ? stylishCreator($children, $depth + 1) : $node['value1'];
+            $value = isNode($node) ? stylishCreator(getChildren($node), $depth + 1) : $node['value'];
             $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
             return is_array($value)
                 ? makeString($depth, $name, $valueToString, 'array')
                 : makeString($depth, $name, $value);
         }
 
-        $value = $node['value1'];
-        $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
-
         if ($type === 'changed') {
-            $value2 = $node['value2'];
-            $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
+            $valueRemoved = $node['removed'];
+            $valueToString = is_array($valueRemoved)
+                ? formatArray($valueRemoved, $depth + 1)
+                : formatValue($valueRemoved);
 
-            $result1 = is_array($value)
+            $valueAdded = $node['added'];
+            $valueToString2 = is_array($valueAdded)
+                ? formatArray($valueAdded, $depth + 1)
+                : formatValue($valueAdded);
+
+            $result1 = is_array($valueRemoved)
                 ? makeString($depth, $name, $valueToString, 'array', $removedId)
                 : makeString($depth, $name, $valueToString, '', $removedId);
-            $result2 = is_array($value2)
+            $result2 = is_array($valueAdded)
                 ? makeString($depth, $name, $valueToString2, 'array', $addedId)
                 : makeString($depth, $name, $valueToString2, '', $addedId);
             return $result1 . "\n" . $result2;
         } elseif ($type === 'removed') {
-            return is_array($value)
+            $valueRemoved = $node['removed'];
+            $valueToString = is_array($valueRemoved)
+                ? formatArray($valueRemoved, $depth + 1)
+                : formatValue($valueRemoved);
+            return is_array($valueRemoved)
                 ? makeString($depth, $name, $valueToString, 'array', $removedId)
                 : makeString($depth, $name, $valueToString, '', $removedId);
         } elseif ($type === 'added') {
-            return is_array($value)
+            $valueAdded = $node['added'];
+            $valueToString = is_array($valueAdded) ? formatArray($valueAdded, $depth + 1) : formatValue($valueAdded);
+            return is_array($valueAdded)
                 ? makeString($depth, $name, $valueToString, 'array', $addedId)
                 : makeString($depth, $name, $valueToString, '', $addedId);
         }

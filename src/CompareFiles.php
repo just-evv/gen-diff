@@ -4,11 +4,33 @@ declare(strict_types=1);
 
 namespace Gendiff\CompareFiles;
 
+use Exception;
+
 use function Functional\sort;
 
-function createNode(string $name, array $children = [], string $type = 'no changes', $value1 = '', $value2 = ''): array
+function createNode(string $name, array $children = []): array
 {
-    return ['name' => $name, 'type' => $type, 'children' => $children, 'value1' => $value1, 'value2' => $value2];
+    return ['name' => $name, 'children' => $children, 'type' => 'no changes'];
+}
+
+function isNode(array $node): bool
+{
+    return array_key_exists('children', $node);
+}
+
+function createLeaf(string $name, string $type, $value1, $value2 = ''): array
+{
+    if ($type === 'no changes') {
+        return ['name' => $name, 'type' => $type, 'value' => $value1];
+    } elseif ($type === 'changed') {
+        return ['name' => $name, 'type' => $type, 'removed' => $value1, 'added' => $value2];
+    } elseif ($type === 'removed') {
+        return ['name' => $name, 'type' => $type, 'removed' => $value1];
+    } elseif ($type === 'added') {
+        return ['name' => $name, 'type' => $type, 'added' => $value1];
+    } else {
+        throw new Exception("undefined type");
+    }
 }
 
 function getName(array $node): string
@@ -26,16 +48,6 @@ function getChildren(array $node): array
     return $node['children'];
 }
 
-function getValue1(array $node)
-{
-    return $node['value1'];
-}
-
-function getValue2(array $node)
-{
-    return $node['value2'];
-}
-
 function compareFiles(array $file1, array $file2): array
 {
     $keys1 = array_keys($file1);
@@ -49,14 +61,14 @@ function compareFiles(array $file1, array $file2): array
             if (is_array($file1[$key]) && is_array($file2[$key])) {
                 return createNode($key, compareFiles($file1[$key], $file2[$key]));
             } elseif ($file1[$key] === $file2[$key]) {
-                return createNode($key, [], 'no changes', $file1[$key]);
+                return createLeaf($key, 'no changes', $file1[$key]);
             } else {
-                return createNode($key, [], 'changed', $file1[$key], $file2[$key]);
+                return createLeaf($key, 'changed', $file1[$key], $file2[$key]);
             }
         } elseif (array_key_exists($key, $file1)) {
-            return createNode($key, [], 'removed', $file1[$key]);
+            return createLeaf($key, 'removed', $file1[$key]);
         } elseif (array_key_exists($key, $file2)) {
-            return createNode($key, [], 'added', $file2[$key]);
+            return createLeaf($key, 'added', $file2[$key]);
         };
         return [];
     }, $allKeys);
