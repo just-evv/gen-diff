@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gendiff\Formatter;
 
 use Exception;
+
 use function Gendiff\Formatter\Stylish\stylish;
 use function Gendiff\Formatter\Plain\plain;
 use function Gendiff\Formatter\Json\json;

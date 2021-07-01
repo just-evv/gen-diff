@@ -50,9 +50,11 @@ function stylishCreator(array $tree, int $depth = 0): array
         $type = getType($node);
         $children = getChildren($node);
         if ($type === 'no changes') {
-            $value = !empty($children) ? stylishCreator($children, $depth + 1) : $node['value1'];
+            $value = ($children !== []) ? stylishCreator($children, $depth + 1) : $node['value1'];
             $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
-            return is_array($value) ? makeString($depth, $name, $valueToString, 'array') : makeString($depth, $name, $value);
+            return is_array($value)
+                ? makeString($depth, $name, $valueToString, 'array')
+                : makeString($depth, $name, $value);
         }
 
         $value = $node['value1'];
@@ -84,7 +86,7 @@ function stylishCreator(array $tree, int $depth = 0): array
 
 function stylish(array $tree): string
 {
-    $stylishTree = ['{', ...stylishCreator($tree)];
-    $stylishTree[] = '}';
-    return implode("\n", $stylishTree);
+    $stylishTree = stylishCreator($tree);
+    $treeToString = implode("\n", $stylishTree);
+    return "{\n" . $treeToString . "\n}";
 }
