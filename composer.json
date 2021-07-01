@@ -35,7 +35,6 @@
             "src/Gendiff.php",
             "src/Parsers.php",
             "src/CompareFiles.php",
-            "src/DiffNode.php",
             "src/Formatter.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Plain.php",
