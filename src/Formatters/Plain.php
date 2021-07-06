@@ -9,6 +9,8 @@ use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
 use function Gendiff\CompareFiles\isNode;
+use function Gendiff\CompareFiles\getRemoved;
+use function Gendiff\CompareFiles\getAdded;
 
 function formatValue(mixed $value): string
 {
@@ -39,13 +41,13 @@ function plain(array $tree, string $rootPath = null): string
                 return plain(getChildren($node), $path);
             }
         } elseif ($type === 'changed') {
-            $value1 = checkValue($node['removed']);
-            $value2 = checkValue($node['added']);
+            $value1 = checkValue(getRemoved($node));
+            $value2 = checkValue(getAdded($node));
             return  "Property '$path' was updated. From $value1 to $value2";
         } elseif ($type === 'removed') {
             return  "Property '$path' was removed";
         } elseif ($type === 'added') {
-            $addedValue = checkValue($node['added']);
+            $addedValue = checkValue(getAdded($node));
             return  "Property '$path' was added with value: $addedValue";
         };
         return '';

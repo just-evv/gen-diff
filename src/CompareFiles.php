@@ -13,12 +13,7 @@ function createNode(string $name, array $children = []): array
     return ['name' => $name, 'children' => $children, 'type' => 'no changes'];
 }
 
-function isNode(array $node): bool
-{
-    return array_key_exists('children', $node);
-}
-
-function createLeaf(string $name, string $type, $value1, $value2 = ''): array
+function createLeaf(string $name, string $type, mixed $value1, mixed $value2 = null): array
 {
     if ($type === 'no changes') {
         return ['name' => $name, 'type' => $type, 'value' => $value1];
@@ -43,9 +38,24 @@ function getType(array $node): string
     return $node['type'];
 }
 
+function isNode(array $node): bool
+{
+    return array_key_exists('children', $node);
+}
+
 function getChildren(array $node): array
 {
     return $node['children'];
+}
+
+function getRemoved(array $node): mixed
+{
+    return $node['removed'];
+}
+
+function getAdded(array $node): mixed
+{
+    return $node['added'];
 }
 
 function compareFiles(array $file1, array $file2): array

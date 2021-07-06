@@ -8,8 +8,10 @@ use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
 use function Gendiff\CompareFiles\isNode;
+use function Gendiff\CompareFiles\getRemoved;
+use function Gendiff\CompareFiles\getAdded;
 
-function formatValue($value): string
+function formatValue(mixed $value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -58,12 +60,12 @@ function stylishCreator(array $tree, int $depth = 0): array
         }
 
         if ($type === 'changed') {
-            $valueRemoved = $node['removed'];
+            $valueRemoved = getRemoved($node);
             $valueToString = is_array($valueRemoved)
                 ? formatArray($valueRemoved, $depth + 1)
                 : formatValue($valueRemoved);
 
-            $valueAdded = $node['added'];
+            $valueAdded = getAdded($node);
             $valueToString2 = is_array($valueAdded)
                 ? formatArray($valueAdded, $depth + 1)
                 : formatValue($valueAdded);
@@ -76,7 +78,7 @@ function stylishCreator(array $tree, int $depth = 0): array
                 : makeString($depth, $name, $valueToString2, '', $addedId);
             return $result1 . "\n" . $result2;
         } elseif ($type === 'removed') {
-            $valueRemoved = $node['removed'];
+            $valueRemoved = getRemoved($node);
             $valueToString = is_array($valueRemoved)
                 ? formatArray($valueRemoved, $depth + 1)
                 : formatValue($valueRemoved);
@@ -84,7 +86,7 @@ function stylishCreator(array $tree, int $depth = 0): array
                 ? makeString($depth, $name, $valueToString, 'array', $removedId)
                 : makeString($depth, $name, $valueToString, '', $removedId);
         } elseif ($type === 'added') {
-            $valueAdded = $node['added'];
+            $valueAdded = getAdded($node);
             $valueToString = is_array($valueAdded) ? formatArray($valueAdded, $depth + 1) : formatValue($valueAdded);
             return is_array($valueAdded)
                 ? makeString($depth, $name, $valueToString, 'array', $addedId)
