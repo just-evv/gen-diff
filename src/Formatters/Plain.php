@@ -10,7 +10,7 @@ use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
 use function Gendiff\CompareFiles\isNode;
 
-function formatValue($value): string
+function formatValue(mixed $value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -23,7 +23,7 @@ function formatValue($value): string
     }
 }
 
-function checkValue($value): string
+function checkValue(mixed $value): string
 {
     return is_array($value) ? '[complex value]' : formatValue($value);
 }
