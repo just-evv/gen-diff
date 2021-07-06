@@ -8,8 +8,12 @@
     "description": "php-project",
     "license": "MIT",
     "name": "hexlet/code",
-    "require": {
-        "php": "8.0",
+    "config": {
+        "platform": {
+            "php": "8.0.0"
+        }
+    },
+        "require": {
         "phpstan/phpstan": "^0.12.65",
         "docopt/docopt": "^1.0",
         "ext-json": "*",
