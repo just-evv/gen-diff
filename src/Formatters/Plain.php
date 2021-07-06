@@ -36,21 +36,22 @@ function plain(array $tree, string $rootPath = null): string
         $name = getName($node);
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
+        $result = '';
         if ($type === 'no changes') {
             if (isNode($node)) {
-                return plain(getChildren($node), $path);
+                $result =  plain(getChildren($node), $path);
             }
         } elseif ($type === 'changed') {
             $value1 = checkValue(getRemoved($node));
             $value2 = checkValue(getAdded($node));
-            return  "Property '$path' was updated. From $value1 to $value2";
+            $result =   "Property '$path' was updated. From $value1 to $value2";
         } elseif ($type === 'removed') {
-            return  "Property '$path' was removed";
+            $result =   "Property '$path' was removed";
         } elseif ($type === 'added') {
             $addedValue = checkValue(getAdded($node));
-            return  "Property '$path' was added with value: $addedValue";
+            $result =  "Property '$path' was added with value: $addedValue";
         };
-        return '';
+        return $result;
     }, $tree);
     $filtered = array_filter(flatten($result));
     return implode("\n", $filtered);
