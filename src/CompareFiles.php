@@ -18,11 +18,11 @@ function createLeaf(string $name, string $type, mixed $value1, mixed $value2 = n
     if ($type === 'no changes') {
         return ['name' => $name, 'type' => $type, 'value' => $value1];
     } elseif ($type === 'changed') {
-        return ['name' => $name, 'type' => $type, 'removed' => $value1, 'added' => $value2];
+        return ['name' => $name, 'type' => $type, 'value' => $value1, 'value2' => $value2];
     } elseif ($type === 'removed') {
-        return ['name' => $name, 'type' => $type, 'removed' => $value1];
+        return ['name' => $name, 'type' => $type, 'value' => $value1];
     } elseif ($type === 'added') {
-        return ['name' => $name, 'type' => $type, 'added' => $value1];
+        return ['name' => $name, 'type' => $type, 'value' => $value1];
     } else {
         throw new Exception("undefined type");
     }
@@ -48,14 +48,14 @@ function getChildren(array $node): array
     return $node['children'];
 }
 
-function getRemoved(array $node): mixed
+function getValue(array $node): mixed
 {
-    return $node['removed'];
+    return $node['value'];
 }
 
-function getAdded(array $node): mixed
+function getValue2(array $node): mixed
 {
-    return $node['added'];
+    return $node['value2'];
 }
 
 function compareFiles(array $file1, array $file2): array

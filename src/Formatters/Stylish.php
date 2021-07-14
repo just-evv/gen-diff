@@ -8,8 +8,8 @@ use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
 use function Gendiff\CompareFiles\isNode;
-use function Gendiff\CompareFiles\getRemoved;
-use function Gendiff\CompareFiles\getAdded;
+use function Gendiff\CompareFiles\getValue;
+use function Gendiff\CompareFiles\getValue2;
 
 function formatValue(mixed $value): string
 {
@@ -19,12 +19,13 @@ function formatValue(mixed $value): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
-function makeString(int $depth, string $name, string $value, string $type = 'string', string $id = '    '): string
+function makeString(array $requiredArguments, bool $type = false, string $id = '    '): string
 {
+    [$depth, $name, $value] = $requiredArguments;
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
 
-    if ($type === 'array') {
+    if ($type === true) {
         return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
     }
     return $prefixIndentation . $id . $name . ': ' . $value;
@@ -34,69 +35,54 @@ function formatArray(array $value, int $depth): string
 {
     $valueKeys = array_keys($value);
     $result =  array_map(function ($key) use ($value, $depth): string {
+
         if (is_array($value[$key])) {
             $newValue = $value[$key];
-            return makeString($depth, $key, formatArray($newValue, $depth + 1), 'array');
+            return makeString([$depth, $key, formatArray($newValue, $depth + 1)], true);
         }
-        return makeString($depth, $key, formatValue($value[$key]));
+        return makeString([$depth, $key, formatValue($value[$key])]);
     }, $valueKeys);
     return implode("\n", $result);
 }
 
 function stylishCreator(array $tree, int $depth = 0): array
 {
-    $removedId = '  - ';
-    $addedId = '  + ';
-
-    return array_map(function ($node) use ($removedId, $addedId, $depth): string {
+    return array_map(function ($node) use ($depth): string {
         $name = getName($node);
         $type = getType($node);
         if ($type === 'no changes') {
-            $value = isNode($node) ? stylishCreator(getChildren($node), $depth + 1) : $node['value'];
+            $value = isNode($node) ? stylishCreator(getChildren($node), $depth + 1) : getValue($node);
             $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
-            return is_array($value)
-                ? makeString($depth, $name, $valueToString, 'array')
-                : makeString($depth, $name, $value);
+            $argumentsForMakeString = [$depth, $name, $valueToString];
+            return makeString($argumentsForMakeString, is_array($value));
         }
 
+        $idRemovedValue = '  - ';
+        $idAddedValue = '  + ';
+
+        $value = getValue($node);
+        $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
+        $argumentsForMakeString = [$depth, $name, $valueToString];
+
         if ($type === 'changed') {
-            $valueRemoved = getRemoved($node);
-            $valueToString = is_array($valueRemoved)
-                ? formatArray($valueRemoved, $depth + 1)
-                : formatValue($valueRemoved);
+            $value2 = getValue2($node);
+            $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
+            $argumentsForMakeString2 = [$depth, $name, $valueToString2];
 
-            $valueAdded = getAdded($node);
-            $valueToString2 = is_array($valueAdded)
-                ? formatArray($valueAdded, $depth + 1)
-                : formatValue($valueAdded);
+            $result1 = makeString($argumentsForMakeString, is_array($value), $idRemovedValue);
+            $result2 = makeString($argumentsForMakeString2, is_array($value2), $idAddedValue);
 
-            $result1 = is_array($valueRemoved)
-                ? makeString($depth, $name, $valueToString, 'array', $removedId)
-                : makeString($depth, $name, $valueToString, '', $removedId);
-            $result2 = is_array($valueAdded)
-                ? makeString($depth, $name, $valueToString2, 'array', $addedId)
-                : makeString($depth, $name, $valueToString2, '', $addedId);
             return $result1 . "\n" . $result2;
         } elseif ($type === 'removed') {
-            $valueRemoved = getRemoved($node);
-            $valueToString = is_array($valueRemoved)
-                ? formatArray($valueRemoved, $depth + 1)
-                : formatValue($valueRemoved);
-            return is_array($valueRemoved)
-                ? makeString($depth, $name, $valueToString, 'array', $removedId)
-                : makeString($depth, $name, $valueToString, '', $removedId);
+            return makeString($argumentsForMakeString, is_array($value), $idRemovedValue);
         } elseif ($type === 'added') {
-            $valueAdded = getAdded($node);
-            $valueToString = is_array($valueAdded) ? formatArray($valueAdded, $depth + 1) : formatValue($valueAdded);
-            return is_array($valueAdded)
-                ? makeString($depth, $name, $valueToString, 'array', $addedId)
-                : makeString($depth, $name, $valueToString, '', $addedId);
+            return makeString($argumentsForMakeString, is_array($value), $idAddedValue);
         }
         return '';
     }, $tree);
 }
 
-function stylish(array $tree): string
+function genStylish(array $tree): string
 {
     $stylishTree = stylishCreator($tree);
     $treeToString = implode("\n", $stylishTree);

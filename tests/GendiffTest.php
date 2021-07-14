@@ -31,7 +31,7 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Parsers\fileGetContent
-     * @covers \Gendiff\Formatter\Stylish\stylish
+     * @covers \Gendiff\Formatter\Stylish\genStylish
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
@@ -39,7 +39,7 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
-     * @covers \Gendiff\Formatter\Plain\plain
+     * @covers \Gendiff\Formatter\Plain\genPlain
      * @covers \Differ\Differ\genDiff
      * @covers \Gendiff\Parsers\jsonParse
      */
@@ -136,7 +136,7 @@ EOD;
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
      * @covers \Gendiff\Parsers\fileGetContent
-     * @covers \Gendiff\Formatter\Stylish\stylish
+     * @covers \Gendiff\Formatter\Stylish\genStylish
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
@@ -144,7 +144,7 @@ EOD;
      * @covers \Gendiff\Formatter\Json\json
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
-     * @covers \Gendiff\Formatter\Plain\plain
+     * @covers \Gendiff\Formatter\Plain\genPlain
      * @covers \Differ\Differ\genDiff
      * @covers \Gendiff\Parsers\yamlParse
      * @covers \Gendiff\Parsers\yamlParseHelper
