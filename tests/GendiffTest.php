@@ -35,6 +35,7 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
+     * @covers \Gendiff\Formatter\Stylish\getValueId
      * @covers \Gendiff\Formatter\Stylish\stylishCreator
      * @covers \Gendiff\Formatter\Json\genJson
      * @covers \Gendiff\Formatter\Plain\checkValue
@@ -140,6 +141,7 @@ EOD;
      * @covers \Gendiff\Formatter\Stylish\formatValue
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
+     * @covers \Gendiff\Formatter\Stylish\getValueId
      * @covers \Gendiff\Formatter\Stylish\stylishCreator
      * @covers \Gendiff\Formatter\Json\genJson
      * @covers \Gendiff\Formatter\Plain\checkValue
