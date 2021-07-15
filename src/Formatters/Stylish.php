@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Stylish;
 
+use Exception;
 use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
@@ -19,13 +20,29 @@ function formatValue(mixed $value): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
+function getValueId(string $type): mixed
+{
+    $idRemovedValue = '  - ';
+    $idAddedValue = '  + ';
+
+    if ($type === 'removed') {
+        return $idRemovedValue;
+    } elseif ($type === 'added') {
+        return $idAddedValue;
+    } elseif ($type === 'changed') {
+        return [$idRemovedValue, $idAddedValue];
+    } else {
+        throw new Exception('undefined type');
+    }
+}
+
 function makeString(array $requiredArguments, string $id = '    '): string
 {
-    [$depth, $name, $value, $type] = $requiredArguments;
+    [$depth, $name, $value, $isValueArray] = $requiredArguments;
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
 
-    if ($type === true) {
+    if ($isValueArray === true) {
         return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
     }
     return $prefixIndentation . $id . $name . ': ' . $value;
@@ -56,8 +73,7 @@ function stylishCreator(array $tree, int $depth = 0): array
             $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
             return makeString($argumentsForMakeString);
         }
-        $idRemovedValue = '  - ';
-        $idAddedValue = '  + ';
+
         $value = getValue($node);
         $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
         $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
@@ -66,16 +82,13 @@ function stylishCreator(array $tree, int $depth = 0): array
             $value2 = getValue2($node);
             $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
             $argumentsForMakeString2 = [$depth, $name, $valueToString2, is_array($value2)];
-
-            $result1 = makeString($argumentsForMakeString, $idRemovedValue);
-            $result2 = makeString($argumentsForMakeString2, $idAddedValue);
+            $id = getValueId($type);
+            $result1 = makeString($argumentsForMakeString, $id[0]);
+            $result2 = makeString($argumentsForMakeString2, $id[1]);
             return $result1 . "\n" . $result2;
-        } elseif ($type === 'removed') {
-            return makeString($argumentsForMakeString, $idRemovedValue);
-        } elseif ($type === 'added') {
-            return makeString($argumentsForMakeString, $idAddedValue);
+        } else {
+            return makeString($argumentsForMakeString, getValueId($type));
         }
-        return '';
     }, $tree);
 }
 
