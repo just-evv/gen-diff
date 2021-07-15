@@ -56,10 +56,8 @@ function stylishCreator(array $tree, int $depth = 0): array
             $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
             return makeString($argumentsForMakeString);
         }
-
         $idRemovedValue = '  - ';
         $idAddedValue = '  + ';
-
         $value = getValue($node);
         $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
         $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
@@ -71,7 +69,6 @@ function stylishCreator(array $tree, int $depth = 0): array
 
             $result1 = makeString($argumentsForMakeString, $idRemovedValue);
             $result2 = makeString($argumentsForMakeString2, $idAddedValue);
-
             return $result1 . "\n" . $result2;
         } elseif ($type === 'removed') {
             return makeString($argumentsForMakeString, $idRemovedValue);

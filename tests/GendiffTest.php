@@ -25,8 +25,8 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\CompareFiles\getName
      * @covers \Gendiff\CompareFiles\getType
      * @covers \Gendiff\CompareFiles\getChildren
-     * @covers \Gendiff\CompareFiles\getAdded
-     * @covers \Gendiff\CompareFiles\getRemoved
+     * @covers \Gendiff\CompareFiles\getValue
+     * @covers \Gendiff\CompareFiles\getValue2
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
@@ -36,7 +36,7 @@ class GendiffTest extends TestCase
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
      * @covers \Gendiff\Formatter\Stylish\stylishCreator
-     * @covers \Gendiff\Formatter\Json\json
+     * @covers \Gendiff\Formatter\Json\genJson
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\genPlain
@@ -130,8 +130,8 @@ EOD;
      * @covers \Gendiff\CompareFiles\getName
      * @covers \Gendiff\CompareFiles\getType
      * @covers \Gendiff\CompareFiles\getChildren
-     * @covers \Gendiff\CompareFiles\getAdded
-     * @covers \Gendiff\CompareFiles\getRemoved
+     * @covers \Gendiff\CompareFiles\getValue
+     * @covers \Gendiff\CompareFiles\getValue2
      * @covers \Gendiff\Formatter\formatter
      * @covers \Gendiff\Parsers\parseFile
      * @covers \Gendiff\Parsers\getExtension
@@ -141,7 +141,7 @@ EOD;
      * @covers \Gendiff\Formatter\Stylish\formatArray
      * @covers \Gendiff\Formatter\Stylish\makeString
      * @covers \Gendiff\Formatter\Stylish\stylishCreator
-     * @covers \Gendiff\Formatter\Json\json
+     * @covers \Gendiff\Formatter\Json\genJson
      * @covers \Gendiff\Formatter\Plain\checkValue
      * @covers \Gendiff\Formatter\Plain\formatValue
      * @covers \Gendiff\Formatter\Plain\genPlain
