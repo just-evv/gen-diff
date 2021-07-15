@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gendiff\Formatter\Stylish;
 
 use Exception;
+
 use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
 use function Gendiff\CompareFiles\getChildren;
