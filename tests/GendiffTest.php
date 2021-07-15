@@ -18,32 +18,32 @@ class GendiffTest extends TestCase
     }
 
     /**
-     * @covers \Gendiff\CompareFiles\compareFiles
-     * @covers \Gendiff\CompareFiles\createNode
-     * @covers \Gendiff\CompareFiles\createLeaf
-     * @covers \Gendiff\CompareFiles\isNode
-     * @covers \Gendiff\CompareFiles\getName
-     * @covers \Gendiff\CompareFiles\getType
-     * @covers \Gendiff\CompareFiles\getChildren
-     * @covers \Gendiff\CompareFiles\getValue
-     * @covers \Gendiff\CompareFiles\getValue2
-     * @covers \Gendiff\Formatter\formatter
-     * @covers \Gendiff\Parsers\parseFile
-     * @covers \Gendiff\Parsers\getExtension
-     * @covers \Gendiff\Parsers\fileGetContent
-     * @covers \Gendiff\Formatter\Stylish\genStylish
-     * @covers \Gendiff\Formatter\Stylish\formatValue
-     * @covers \Gendiff\Formatter\Stylish\formatArray
-     * @covers \Gendiff\Formatter\Stylish\makeString
-     * @covers \Gendiff\Formatter\Stylish\getValueId
-     * @covers \Gendiff\Formatter\Stylish\stylishCreator
-     * @covers \Gendiff\Formatter\Json\genJson
-     * @covers \Gendiff\Formatter\Plain\checkValue
-     * @covers \Gendiff\Formatter\Plain\formatValue
-     * @covers \Gendiff\Formatter\Plain\genString
-     * @covers \Gendiff\Formatter\Plain\genPlain
+     * @covers \Differ\DiffGenerator\compareFiles
+     * @covers \Differ\DiffGenerator\createNode
+     * @covers \Differ\DiffGenerator\createLeaf
+     * @covers \Differ\DiffGenerator\isNode
+     * @covers \Differ\DiffGenerator\getName
+     * @covers \Differ\DiffGenerator\getType
+     * @covers \Differ\DiffGenerator\getChildren
+     * @covers \Differ\DiffGenerator\getValue
+     * @covers \Differ\DiffGenerator\getValue2
+     * @covers \Differ\Formatter\format
+     * @covers \Differ\Parsers\parseFile
+     * @covers \Differ\Parsers\getExtension
+     * @covers \Differ\Parsers\fileGetContent
+     * @covers \Differ\Formatter\Stylish\genStylish
+     * @covers \Differ\Formatter\Stylish\formatValue
+     * @covers \Differ\Formatter\Stylish\formatArray
+     * @covers \Differ\Formatter\Stylish\makeString
+     * @covers \Differ\Formatter\Stylish\getValueId
+     * @covers \Differ\Formatter\Stylish\stylishCreator
+     * @covers \Differ\Formatter\Json\genJson
+     * @covers \Differ\Formatter\Plain\checkValue
+     * @covers \Differ\Formatter\Plain\formatValue
+     * @covers \Differ\Formatter\Plain\genString
+     * @covers \Differ\Formatter\Plain\genPlain
      * @covers \Differ\Differ\genDiff
-     * @covers \Gendiff\Parsers\jsonParse
+     * @covers \Differ\Parsers\jsonParse
      */
     public function testGenDiffJson()
     {
@@ -125,33 +125,33 @@ EOD;
         $this->assertEquals($expected3, $actual3);
     }
     /**
-     * @covers \Gendiff\CompareFiles\compareFiles
-     * @covers \Gendiff\CompareFiles\createNode
-     * @covers \Gendiff\CompareFiles\createLeaf
-     * @covers \Gendiff\CompareFiles\isNode
-     * @covers \Gendiff\CompareFiles\getName
-     * @covers \Gendiff\CompareFiles\getType
-     * @covers \Gendiff\CompareFiles\getChildren
-     * @covers \Gendiff\CompareFiles\getValue
-     * @covers \Gendiff\CompareFiles\getValue2
-     * @covers \Gendiff\Formatter\formatter
-     * @covers \Gendiff\Parsers\parseFile
-     * @covers \Gendiff\Parsers\getExtension
-     * @covers \Gendiff\Parsers\fileGetContent
-     * @covers \Gendiff\Formatter\Stylish\genStylish
-     * @covers \Gendiff\Formatter\Stylish\formatValue
-     * @covers \Gendiff\Formatter\Stylish\formatArray
-     * @covers \Gendiff\Formatter\Stylish\makeString
-     * @covers \Gendiff\Formatter\Stylish\getValueId
-     * @covers \Gendiff\Formatter\Stylish\stylishCreator
-     * @covers \Gendiff\Formatter\Json\genJson
-     * @covers \Gendiff\Formatter\Plain\checkValue
-     * @covers \Gendiff\Formatter\Plain\formatValue
-     * @covers \Gendiff\Formatter\Plain\genString
-     * @covers \Gendiff\Formatter\Plain\genPlain
+     * @covers \Differ\DiffGenerator\compareFiles
+     * @covers \Differ\DiffGenerator\createNode
+     * @covers \Differ\DiffGenerator\createLeaf
+     * @covers \Differ\DiffGenerator\isNode
+     * @covers \Differ\DiffGenerator\getName
+     * @covers \Differ\DiffGenerator\getType
+     * @covers \Differ\DiffGenerator\getChildren
+     * @covers \Differ\DiffGenerator\getValue
+     * @covers \Differ\DiffGenerator\getValue2
+     * @covers \Differ\Formatter\format
+     * @covers \Differ\Parsers\parseFile
+     * @covers \Differ\Parsers\getExtension
+     * @covers \Differ\Parsers\fileGetContent
+     * @covers \Differ\Formatter\Stylish\genStylish
+     * @covers \Differ\Formatter\Stylish\formatValue
+     * @covers \Differ\Formatter\Stylish\formatArray
+     * @covers \Differ\Formatter\Stylish\makeString
+     * @covers \Differ\Formatter\Stylish\getValueId
+     * @covers \Differ\Formatter\Stylish\stylishCreator
+     * @covers \Differ\Formatter\Json\genJson
+     * @covers \Differ\Formatter\Plain\checkValue
+     * @covers \Differ\Formatter\Plain\formatValue
+     * @covers \Differ\Formatter\Plain\genString
+     * @covers \Differ\Formatter\Plain\genPlain
      * @covers \Differ\Differ\genDiff
-     * @covers \Gendiff\Parsers\yamlParse
-     * @covers \Gendiff\Parsers\yamlParseHelper
+     * @covers \Differ\Parsers\yamlParse
+     * @covers \Differ\Parsers\yamlParseHelper
      */
     public function testGenDiffYaml()
     {

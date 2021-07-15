@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\CompareFiles;
+namespace Differ\DiffGenerator;
 
 use Exception;
 

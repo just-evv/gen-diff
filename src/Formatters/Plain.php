@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\Formatter\Plain;
+namespace Differ\Formatter\Plain;
 
 use Exception;
 
 use function Functional\flatten;
-use function Gendiff\CompareFiles\getName;
-use function Gendiff\CompareFiles\getType;
-use function Gendiff\CompareFiles\getChildren;
-use function Gendiff\CompareFiles\isNode;
-use function Gendiff\CompareFiles\getValue;
-use function Gendiff\CompareFiles\getValue2;
+use function Differ\DiffGenerator\getName;
+use function Differ\DiffGenerator\getType;
+use function Differ\DiffGenerator\getChildren;
+use function Differ\DiffGenerator\isNode;
+use function Differ\DiffGenerator\getValue;
+use function Differ\DiffGenerator\getValue2;
 
 function formatValue(mixed $value): string
 {

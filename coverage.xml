@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1623087400">
   <project timestamp="1623087400">
-    <file name="/app/src/CompareFiles.php">
+    <file name="/app/src/DiffGenerator.php">
       <line num="14" type="stmt" count="2"/>
       <line num="15" type="stmt" count="2"/>
       <line num="16" type="stmt" count="2"/>

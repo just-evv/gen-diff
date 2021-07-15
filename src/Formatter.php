@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\Formatter;
+namespace Differ\Formatter;
 
 use Exception;
 
-use function Gendiff\Formatter\Stylish\genStylish;
-use function Gendiff\Formatter\Plain\genPlain;
-use function Gendiff\Formatter\Json\genJson;
+use function Differ\Formatter\Stylish\genStylish;
+use function Differ\Formatter\Plain\genPlain;
+use function Differ\Formatter\Json\genJson;
 
-function formatter(array $file, string $formatName): string
+function format(array $file, string $formatName): string
 {
-    if ($formatName === '' || $formatName === 'stylish') {
+    if ($formatName === 'stylish') {
         return genStylish($file);
     } elseif ($formatName === 'plain') {
         return genPlain($file);

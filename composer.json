@@ -39,7 +39,7 @@
             "vendor/docopt/docopt/src/docopt.php",
             "src/Differ.php",
             "src/Parsers.php",
-            "src/CompareFiles.php",
+            "src/TreeGenerator.php",
             "src/Formatter.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Plain.php",

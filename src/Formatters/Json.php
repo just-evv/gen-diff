@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gendiff\Formatter\Json;
+namespace Differ\Formatter\Json;
 
 use Exception;
 
