@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Gendiff\Formatter\Plain;
 
+use Exception;
+
 use function Functional\flatten;
 use function Gendiff\CompareFiles\getName;
 use function Gendiff\CompareFiles\getType;
@@ -30,6 +32,22 @@ function checkValue(mixed $value): string
     return is_array($value) ? '[complex value]' : formatValue($value);
 }
 
+function genString(string $type, array $node, string $path): string
+{
+    if ($type === 'changed') {
+        $value1 = checkValue(getValue($node));
+        $value2 = checkValue(getValue2($node));
+        return  "Property '$path' was updated. From $value1 to $value2";
+    } elseif ($type === 'removed') {
+        return  "Property '$path' was removed";
+    } elseif ($type === 'added') {
+        $addedValue = checkValue(getValue($node));
+        return  "Property '$path' was added with value: $addedValue";
+    } else {
+        throw new Exception('type undefined');
+    }
+}
+
 function genPlain(array $tree, string $rootPath = null): string
 {
     $result =  array_map(function ($node) use ($rootPath): string {
@@ -40,15 +58,8 @@ function genPlain(array $tree, string $rootPath = null): string
             if (isNode($node)) {
                 return genPlain(getChildren($node), $path);
             }
-        } elseif ($type === 'changed') {
-            $value1 = checkValue(getValue($node));
-            $value2 = checkValue(getValue2($node));
-            return  "Property '$path' was updated. From $value1 to $value2";
-        } elseif ($type === 'removed') {
-            return  "Property '$path' was removed";
-        } elseif ($type === 'added') {
-            $addedValue = checkValue(getValue($node));
-            return  "Property '$path' was added with value: $addedValue";
+        } else {
+            return genString($type, $node, $path);
         };
         return '';
     }, $tree);
