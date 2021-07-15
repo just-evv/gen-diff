@@ -19,9 +19,9 @@ function formatValue(mixed $value): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
-function makeString(array $requiredArguments, bool $type = false, string $id = '    '): string
+function makeString(array $requiredArguments, string $id = '    '): string
 {
-    [$depth, $name, $value] = $requiredArguments;
+    [$depth, $name, $value, $type] = $requiredArguments;
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
 
@@ -38,9 +38,9 @@ function formatArray(array $value, int $depth): string
 
         if (is_array($value[$key])) {
             $newValue = $value[$key];
-            return makeString([$depth, $key, formatArray($newValue, $depth + 1)], true);
+            return makeString([$depth, $key, formatArray($newValue, $depth + 1), true]);
         }
-        return makeString([$depth, $key, formatValue($value[$key])]);
+        return makeString([$depth, $key, formatValue($value[$key]), false]);
     }, $valueKeys);
     return implode("\n", $result);
 }
@@ -53,8 +53,8 @@ function stylishCreator(array $tree, int $depth = 0): array
         if ($type === 'no changes') {
             $value = isNode($node) ? stylishCreator(getChildren($node), $depth + 1) : getValue($node);
             $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
-            $argumentsForMakeString = [$depth, $name, $valueToString];
-            return makeString($argumentsForMakeString, is_array($value));
+            $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
+            return makeString($argumentsForMakeString);
         }
 
         $idRemovedValue = '  - ';
@@ -62,21 +62,21 @@ function stylishCreator(array $tree, int $depth = 0): array
 
         $value = getValue($node);
         $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
-        $argumentsForMakeString = [$depth, $name, $valueToString];
+        $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
 
         if ($type === 'changed') {
             $value2 = getValue2($node);
             $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
-            $argumentsForMakeString2 = [$depth, $name, $valueToString2];
+            $argumentsForMakeString2 = [$depth, $name, $valueToString2, is_array($value2)];
 
-            $result1 = makeString($argumentsForMakeString, is_array($value), $idRemovedValue);
-            $result2 = makeString($argumentsForMakeString2, is_array($value2), $idAddedValue);
+            $result1 = makeString($argumentsForMakeString, $idRemovedValue);
+            $result2 = makeString($argumentsForMakeString2, $idAddedValue);
 
             return $result1 . "\n" . $result2;
         } elseif ($type === 'removed') {
-            return makeString($argumentsForMakeString, is_array($value), $idRemovedValue);
+            return makeString($argumentsForMakeString, $idRemovedValue);
         } elseif ($type === 'added') {
-            return makeString($argumentsForMakeString, is_array($value), $idAddedValue);
+            return makeString($argumentsForMakeString, $idAddedValue);
         }
         return '';
     }, $tree);
