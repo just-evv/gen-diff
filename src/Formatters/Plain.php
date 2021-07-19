@@ -15,15 +15,12 @@ use function Differ\DiffGenerator\getValue2;
 
 function formatValue(mixed $value): string
 {
-    if (is_bool($value)) {
-        return $value ? 'true' : 'false';
-    } elseif (is_null($value)) {
-        return 'null';
-    } elseif (is_integer($value)) {
-        return (string) $value;
-    } else {
-        return "'$value'";
-    }
+    return match(true) {
+        is_bool($value) => $value ? 'true' : 'false',
+        is_null($value) => 'null',
+        is_integer($value) => (string) $value,
+        default => "'$value'",
+    };
 }
 
 function checkValue(mixed $value): string
@@ -31,21 +28,25 @@ function checkValue(mixed $value): string
     return is_array($value) ? '[complex value]' : formatValue($value);
 }
 
+/**
+ * @throws Exception
+ */
 function genString(string $type, array $node, string $path): string
 {
-    if ($type === 'changed') {
-        $value1 = checkValue(getValue($node));
-        $value2 = checkValue(getValue2($node));
-        return  "Property '$path' was updated. From $value1 to $value2";
-    } elseif ($type === 'removed') {
-        return  "Property '$path' was removed";
-    } elseif ($type === 'added') {
-        $addedValue = checkValue(getValue($node));
-        return  "Property '$path' was added with value: $addedValue";
-    } elseif($type === 'no changes') {
-        return '';
-    } else {
-        throw new Exception('type undefined');
+    switch ($type) {
+        case 'no changes':
+            return '';
+        case 'changed':
+            $value1 = checkValue(getValue($node));
+            $value2 = checkValue(getValue2($node));
+            return  "Property '$path' was updated. From $value1 to $value2";
+        case 'removed':
+            return  "Property '$path' was removed";
+        case 'added':
+            $addedValue = checkValue(getValue($node));
+            return  "Property '$path' was added with value: $addedValue";
+        default:
+            throw new Exception('type undefined');
     }
 }
 
