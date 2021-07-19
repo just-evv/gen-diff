@@ -10,7 +10,6 @@ use function Functional\flatten;
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
 use function Differ\DiffGenerator\getChildren;
-use function Differ\DiffGenerator\isNode;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
@@ -43,6 +42,8 @@ function genString(string $type, array $node, string $path): string
     } elseif ($type === 'added') {
         $addedValue = checkValue(getValue($node));
         return  "Property '$path' was added with value: $addedValue";
+    } elseif($type === 'no changes') {
+        return '';
     } else {
         throw new Exception('type undefined');
     }
@@ -54,14 +55,11 @@ function genPlain(array $tree, string $rootPath = null): string
         $name = getName($node);
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
-        if ($type === 'no changes') {
-            if (isNode($node)) {
-                return genPlain(getChildren($node), $path);
-            }
+        if ($type === 'nested') {
+            return genPlain(getChildren($node), $path);
         } else {
             return genString($type, $node, $path);
-        };
-        return '';
+        }
     }, $tree);
     $filtered = array_filter(flatten($result));
     return implode("\n", $filtered);

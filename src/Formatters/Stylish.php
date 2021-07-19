@@ -9,7 +9,6 @@ use Exception;
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
 use function Differ\DiffGenerator\getChildren;
-use function Differ\DiffGenerator\isNode;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
@@ -21,10 +20,14 @@ function formatValue(mixed $value): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
+/**
+ * @throws Exception
+ */
 function getValueId(string $type): mixed
 {
     $idRemovedValue = '  - ';
     $idAddedValue = '  + ';
+    $idNoChanges = '    ';
 
     if ($type === 'removed') {
         return $idRemovedValue;
@@ -32,7 +35,9 @@ function getValueId(string $type): mixed
         return $idAddedValue;
     } elseif ($type === 'changed') {
         return [$idRemovedValue, $idAddedValue];
-    } else {
+    } elseif ($type === 'no changes') {
+        return $idNoChanges;
+    }else {
         throw new Exception('undefined type');
     }
 }
@@ -68,13 +73,20 @@ function stylishCreator(array $tree, int $depth = 0): array
     return array_map(function ($node) use ($depth): string {
         $name = getName($node);
         $type = getType($node);
-        if ($type === 'no changes') {
-            $value = isNode($node) ? stylishCreator(getChildren($node), $depth + 1) : getValue($node);
-            $valueToString = is_array($value) ? implode("\n", $value) : formatValue($value);
-            $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
+        if ($type === 'nested') {
+            $value = stylishCreator(getChildren($node), $depth + 1);
+            $valueToString = implode("\n", $value);
+            $argumentsForMakeString = [$depth, $name, $valueToString, true];
             return makeString($argumentsForMakeString);
         }
-
+        /*
+        if ($type === 'no changes') {
+            $value = getValue($node);
+            $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
+            $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
+            return makeString($argumentsForMakeString, );
+        }
+*/
         $value = getValue($node);
         $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
         $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];

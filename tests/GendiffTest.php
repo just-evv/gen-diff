@@ -18,7 +18,7 @@ class GendiffTest extends TestCase
     }
 
     /**
-     * @covers \Differ\DiffGenerator\compareFiles
+     * @covers \Differ\DiffGenerator\compareTrees
      * @covers \Differ\DiffGenerator\createNode
      * @covers \Differ\DiffGenerator\createLeaf
      * @covers \Differ\DiffGenerator\isNode
@@ -125,7 +125,7 @@ EOD;
         $this->assertEquals($expected3, $actual3);
     }
     /**
-     * @covers \Differ\DiffGenerator\compareFiles
+     * @covers \Differ\DiffGenerator\compareTrees
      * @covers \Differ\DiffGenerator\createNode
      * @covers \Differ\DiffGenerator\createLeaf
      * @covers \Differ\DiffGenerator\isNode
