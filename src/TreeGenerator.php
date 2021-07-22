@@ -11,7 +11,7 @@ use function Functional\sort;
 /**
  * @throws Exception
  */
-function createLeaf(string $name, string $type, mixed $value1, mixed $value2 = null): array
+function createNode(string $name, string $type, mixed $value1, mixed $value2 = null): array
 {
     return match ($type) {
         'no changes', 'removed', 'added' => ['name' => $name, 'type' => $type, 'value' => $value1],
@@ -53,21 +53,25 @@ function compareTrees(array $tree1, array $tree2): array
 
     $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
-    return array_map(function ($key) use ($tree1, $tree2): array {
+    return array_map(
+        /**
+        * @throws Exception
+        */
+        function ($key) use ($tree1, $tree2): array {
         switch (true) {
             case (array_key_exists($key, $tree1) && array_key_exists($key, $tree2)):
                 switch (true) {
                     case (is_array($tree1[$key]) && is_array($tree2[$key])):
                         return ['name' => $key, 'type' => 'nested', 'children' => compareTrees($tree1[$key], $tree2[$key])];
                     case ($tree1[$key] === $tree2[$key]):
-                        return createLeaf($key, 'no changes', $tree1[$key]);
+                        return createNode($key, 'no changes', $tree1[$key]);
                     default:
-                        return createLeaf($key, 'changed', $tree1[$key], $tree2[$key]);
+                        return createNode($key, 'changed', $tree1[$key], $tree2[$key]);
                 }
             case array_key_exists($key, $tree1):
-                return createLeaf($key, 'removed', $tree1[$key]);
+                return createNode($key, 'removed', $tree1[$key]);
             case array_key_exists($key, $tree2):
-                return createLeaf($key, 'added', $tree2[$key]);
+                return createNode($key, 'added', $tree2[$key]);
             default:
                 throw new Exception("something went wrong");
         }

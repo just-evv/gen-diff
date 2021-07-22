@@ -8,6 +8,9 @@ use function Differ\Parsers\parseFile;
 use function Differ\DiffGenerator\compareTrees;
 use function Differ\Formatter\format;
 
+/**
+ * @throws \Exception
+ */
 function genDiff(string $pathToFile1, string $pathToFile2, string $formatName = 'stylish'): string
 {
     $file1 = parseFile($pathToFile1);

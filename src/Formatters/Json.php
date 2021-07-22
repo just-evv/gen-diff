@@ -6,6 +6,9 @@ namespace Differ\Formatter\Json;
 
 use Exception;
 
+/**
+ * @throws Exception
+ */
 function genJson(array $tree): string
 {
     $result = json_encode($tree, JSON_FORCE_OBJECT);

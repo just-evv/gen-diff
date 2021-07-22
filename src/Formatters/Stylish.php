@@ -23,84 +23,114 @@ function formatValue(mixed $value): string
 /**
  * @throws Exception
  */
-function getValueId(string $type): mixed
+function getValuePrefix(string $type): mixed
 {
-    $idRemovedValue = '  - ';
-    $idAddedValue = '  + ';
-    $idNoChanges = '    ';
+    $prefixRemovedValue = '  - ';
+    $prefixAddedValue = '  + ';
+    $prefixNoChanges = '    ';
 
     if ($type === 'removed') {
-        return $idRemovedValue;
+        return $prefixRemovedValue;
     } elseif ($type === 'added') {
-        return $idAddedValue;
+        return $prefixAddedValue;
     } elseif ($type === 'changed') {
-        return [$idRemovedValue, $idAddedValue];
+        return [$prefixRemovedValue, $prefixAddedValue];
     } elseif ($type === 'no changes') {
-        return $idNoChanges;
+        return $prefixNoChanges;
     }else {
         throw new Exception('undefined type');
     }
 }
-
-function makeString(array $requiredArguments, string $id = '    '): string
+/*
+function makeString(array $requiredArguments, string $prefix = '    '): string
 {
     [$depth, $name, $value, $isValueArray] = $requiredArguments;
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
 
     if ($isValueArray === true) {
-        return $prefixIndentation . $id . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
+        return $prefixIndentation . $prefix . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
     }
-    return $prefixIndentation . $id . $name . ': ' . $value;
+    return $prefixIndentation . $prefix . $name . ': ' . $value;
 }
-
+*/
 function formatArray(array $value, int $depth): string
 {
     $valueKeys = array_keys($value);
     $result =  array_map(function ($key) use ($value, $depth): string {
-
+        $indentation = '    ';
+        $prefixIndentation = str_repeat($indentation, $depth);
         if (is_array($value[$key])) {
             $newValue = $value[$key];
-            return makeString([$depth, $key, formatArray($newValue, $depth + 1), true]);
+            return $prefixIndentation . $indentation . $key . ": {\n" . formatArray($newValue, $depth + 1) . "\n" . $prefixIndentation . $indentation . "}";
+                //makeString($depth, $key, formatArray($newValue, $depth + 1));
         }
-        return makeString([$depth, $key, formatValue($value[$key]), false]);
+        return makeString($depth, $key, formatValue($value[$key]));
     }, $valueKeys);
     return implode("\n", $result);
 }
 
+function makeString($depth, $name, $value, string $prefix = '    ')
+{
+    $prefixIndentation = str_repeat('    ', $depth);
+
+    if (!is_array($value)) {
+        return $prefixIndentation . $prefix . $name . ': ' . formatValue($value);
+    } else {
+        $valueKeys = array_keys($value);
+
+        $result =  array_map(function ($key) use ($value, $depth): string {
+            $prefixIndentation = str_repeat('    ', $depth + 1);
+            if (is_array($value[$key])) {
+                $newValue = $value[$key];
+                return $prefixIndentation . $key . ": {\n" . formatArray($newValue, $depth + 1) . "\n" . $prefixIndentation . "}";
+            }
+            return "$prefixIndentation $key: " . formatValue($value[$key]);
+        }, $valueKeys);
+
+        return implode("\n", $result);
+    }
+}
+/*
+function makeString($depth, $name, $value, string $prefix = '    ')
+{
+
+    $newValue = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
+    $indentation = '    ';
+    $prefixIndentation = str_repeat($indentation, $depth);
+    if (is_array($value)) {
+        return $prefixIndentation . $prefix . $name . ": {\n" . $newValue . "\n" . $prefixIndentation . $indentation . "}";
+    }
+    return $prefixIndentation . $prefix . $name . ': ' . $newValue;
+}
+
+*/
 function stylishCreator(array $tree, int $depth = 0): array
 {
     return array_map(function ($node) use ($depth): string {
         $name = getName($node);
         $type = getType($node);
         if ($type === 'nested') {
-            $value = stylishCreator(getChildren($node), $depth + 1);
-            $valueToString = implode("\n", $value);
-            $argumentsForMakeString = [$depth, $name, $valueToString, true];
-            return makeString($argumentsForMakeString);
+            $children = getChildren($node);
+            $result = stylishCreator($children, $depth + 1);
+
+            return makeString($depth, $name, implode('\n', $result));
         }
-        /*
-        if ($type === 'no changes') {
-            $value = getValue($node);
-            $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
-            $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
-            return makeString($argumentsForMakeString, );
-        }
-*/
+
         $value = getValue($node);
-        $valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
-        $argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
+        //$valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
+        //$argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
 
         if ($type === 'changed') {
             $value2 = getValue2($node);
-            $valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
-            $argumentsForMakeString2 = [$depth, $name, $valueToString2, is_array($value2)];
-            $id = getValueId($type);
-            $result1 = makeString($argumentsForMakeString, $id[0]);
-            $result2 = makeString($argumentsForMakeString2, $id[1]);
+            //$valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
+            //$argumentsForMakeString2 = [$depth, $name, $valueToString2, is_array($value2)];
+            $id = getValuePrefix($type);
+            $result1 = makeString($depth, $name, $value, $id[0]);
+            $result2 = makeString($depth, $name, $value2, $id[1]);
             return $result1 . "\n" . $result2;
         } else {
-            return makeString($argumentsForMakeString, getValueId($type));
+            return makeString($depth, $name, $value, getValuePrefix($type));
         }
     }, $tree);
 }
