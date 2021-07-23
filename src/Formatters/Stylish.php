@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Differ\Formatter\Stylish;
@@ -12,9 +11,11 @@ use function Differ\DiffGenerator\getChildren;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
-function formatValue(mixed $value): string
+function formatValue(mixed $value, int $depth): string
 {
-    if (is_bool($value)) {
+    if (is_array($value)) {
+        return formatArray($value, $depth + 1);
+    } elseif (is_bool($value)) {
         return $value ? 'true' : 'false';
     }
     return is_null($value) ? 'null' :  (string) $value;
@@ -23,7 +24,7 @@ function formatValue(mixed $value): string
 /**
  * @throws Exception
  */
-function getValuePrefix(string $type): mixed
+function getPrefix(string $type): mixed
 {
     $prefixRemovedValue = '  - ';
     $prefixAddedValue = '  + ';
@@ -41,103 +42,67 @@ function getValuePrefix(string $type): mixed
         throw new Exception('undefined type');
     }
 }
-/*
-function makeString(array $requiredArguments, string $prefix = '    '): string
-{
-    [$depth, $name, $value, $isValueArray] = $requiredArguments;
-    $indentation = '    ';
-    $prefixIndentation = str_repeat($indentation, $depth);
 
-    if ($isValueArray === true) {
-        return $prefixIndentation . $prefix . $name . ": {\n" . $value . "\n" . $prefixIndentation . $indentation . "}";
-    }
-    return $prefixIndentation . $prefix . $name . ': ' . $value;
+function formatArrayWithOpenCloseBraces(array $result, int $depth): string
+{
+    $indentation = '    ';
+
+    return "{\n" . implode("\n", $result) . "\n" . str_repeat($indentation, $depth) . "}";
 }
-*/
+
 function formatArray(array $value, int $depth): string
 {
     $valueKeys = array_keys($value);
     $result =  array_map(function ($key) use ($value, $depth): string {
-        $indentation = '    ';
-        $prefixIndentation = str_repeat($indentation, $depth);
-        if (is_array($value[$key])) {
-            $newValue = $value[$key];
-            return $prefixIndentation . $indentation . $key . ": {\n" . formatArray($newValue, $depth + 1) . "\n" . $prefixIndentation . $indentation . "}";
-                //makeString($depth, $key, formatArray($newValue, $depth + 1));
-        }
-        return makeString($depth, $key, formatValue($value[$key]));
+        return makeString($depth, $key, $value[$key]);
     }, $valueKeys);
-    return implode("\n", $result);
+
+    return formatArrayWithOpenCloseBraces($result, $depth);
 }
 
-function makeString($depth, $name, $value, string $prefix = '    ')
+
+function makeString(int $depth, string $name, mixed $value, string $prefix = '    '): string
 {
-    $prefixIndentation = str_repeat('    ', $depth);
+    $formattedValue = formatValue($value, $depth);
 
-    if (!is_array($value)) {
-        return $prefixIndentation . $prefix . $name . ': ' . formatValue($value);
-    } else {
-        $valueKeys = array_keys($value);
-
-        $result =  array_map(function ($key) use ($value, $depth): string {
-            $prefixIndentation = str_repeat('    ', $depth + 1);
-            if (is_array($value[$key])) {
-                $newValue = $value[$key];
-                return $prefixIndentation . $key . ": {\n" . formatArray($newValue, $depth + 1) . "\n" . $prefixIndentation . "}";
-            }
-            return "$prefixIndentation $key: " . formatValue($value[$key]);
-        }, $valueKeys);
-
-        return implode("\n", $result);
-    }
-}
-/*
-function makeString($depth, $name, $value, string $prefix = '    ')
-{
-
-    $newValue = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
-    if (is_array($value)) {
-        return $prefixIndentation . $prefix . $name . ": {\n" . $newValue . "\n" . $prefixIndentation . $indentation . "}";
+
+    return $prefixIndentation . $prefix . $name . ': ' . $formattedValue;}
+
+/**
+ * @throws Exception
+ */
+function formatNode(array $node, int $depth): string
+{
+    $name = getName($node);
+    $value = getValue($node);
+    $type = getType($node);
+    $prefix = getPrefix($type);
+
+    if ($type === 'changed') {
+        $value2 = getValue2($node);
+        $result1 = makeString($depth, $name, $value, $prefix[0]);
+        $result2 = makeString($depth, $name, $value2, $prefix[1]);
+
+        return $result1 . "\n" . $result2;
     }
-    return $prefixIndentation . $prefix . $name . ': ' . $newValue;
+    return  makeString($depth, $name, $value, $prefix);
 }
 
-*/
-function stylishCreator(array $tree, int $depth = 0): array
+function genStylish(array $tree, int $depth = 0): string
 {
-    return array_map(function ($node) use ($depth): string {
+    $res = array_map(function ($node) use ($depth): string {
         $name = getName($node);
         $type = getType($node);
         if ($type === 'nested') {
-            $children = getChildren($node);
-            $result = stylishCreator($children, $depth + 1);
-
-            return makeString($depth, $name, implode('\n', $result));
+            $value = genStylish(getChildren($node), $depth + 1);
+            return makeString($depth, $name, $value);
         }
 
-        $value = getValue($node);
-        //$valueToString = is_array($value) ? formatArray($value, $depth + 1) : formatValue($value);
-        //$argumentsForMakeString = [$depth, $name, $valueToString, is_array($value)];
+        return FormatNode($node, $depth);
 
-        if ($type === 'changed') {
-            $value2 = getValue2($node);
-            //$valueToString2 = is_array($value2) ? formatArray($value2, $depth + 1) : formatValue($value2);
-            //$argumentsForMakeString2 = [$depth, $name, $valueToString2, is_array($value2)];
-            $id = getValuePrefix($type);
-            $result1 = makeString($depth, $name, $value, $id[0]);
-            $result2 = makeString($depth, $name, $value2, $id[1]);
-            return $result1 . "\n" . $result2;
-        } else {
-            return makeString($depth, $name, $value, getValuePrefix($type));
-        }
     }, $tree);
-}
 
-function genStylish(array $tree): string
-{
-    $stylishTree = stylishCreator($tree);
-    $treeToString = implode("\n", $stylishTree);
-    return "{\n" . $treeToString . "\n}";
+    return formatArrayWithOpenCloseBraces($res, $depth);
 }
