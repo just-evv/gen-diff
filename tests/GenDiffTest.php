@@ -81,8 +81,8 @@ class GenDiffTest extends TestCase
      * @covers       \Differ\Formatter\Stylish\formatValue
      * @covers       \Differ\Formatter\Stylish\formatArray
      * @covers       \Differ\Formatter\Stylish\makeString
-     * @covers       \Differ\Formatter\Stylish\getValuePrefix
-     * @covers       \Differ\Formatter\Stylish\stylishCreator
+     * @covers       \Differ\Formatter\Stylish\getPrefix
+     * @covers       \Differ\Formatter\Stylish\formatNode
      * @covers       \Differ\Formatter\Json\genJson
      * @covers       \Differ\Formatter\Plain\checkValue
      * @covers       \Differ\Formatter\Plain\formatValue
