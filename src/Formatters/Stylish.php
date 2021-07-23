@@ -102,7 +102,7 @@ function genStylish(array $tree, int $depth = 0): string
             return makeString($depth, $name, $value);
         }
 
-        return FormatNode($node, $depth);
+        return formatNode($node, $depth);
     }, $tree);
 
     return formatArrayWithOpenCloseBraces($res, $depth);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Differ\Formatter\Plain;
 
 use Exception;
-use JetBrains\PhpStorm\Pure;
 
 use function Functional\flatten;
 use function Differ\DiffGenerator\getName;
@@ -24,7 +23,6 @@ function formatValue(mixed $value): string
     };
 }
 
-#[Pure]
 function checkValue(mixed $value): string
 {
     return is_array($value) ? '[complex value]' : formatValue($value);
