@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Differ\Formatter\Plain;
 
 use Exception;
-
 use JetBrains\PhpStorm\Pure;
+
 use function Functional\flatten;
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
@@ -16,7 +16,7 @@ use function Differ\DiffGenerator\getValue2;
 
 function formatValue(mixed $value): string
 {
-    return match(true) {
+    return match (true) {
         is_bool($value) => $value ? 'true' : 'false',
         is_null($value) => 'null',
         is_integer($value) => (string) $value,

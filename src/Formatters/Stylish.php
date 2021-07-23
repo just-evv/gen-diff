@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Differ\Formatter\Stylish;
@@ -38,7 +39,7 @@ function getPrefix(string $type): mixed
         return [$prefixRemovedValue, $prefixAddedValue];
     } elseif ($type === 'no changes') {
         return $prefixNoChanges;
-    }else {
+    } else {
         throw new Exception('undefined type');
     }
 }
@@ -68,7 +69,8 @@ function makeString(int $depth, string $name, mixed $value, string $prefix = '  
     $indentation = '    ';
     $prefixIndentation = str_repeat($indentation, $depth);
 
-    return $prefixIndentation . $prefix . $name . ': ' . $formattedValue;}
+    return $prefixIndentation . $prefix . $name . ': ' . $formattedValue;
+}
 
 /**
  * @throws Exception
@@ -101,7 +103,6 @@ function genStylish(array $tree, int $depth = 0): string
         }
 
         return FormatNode($node, $depth);
-
     }, $tree);
 
     return formatArrayWithOpenCloseBraces($res, $depth);

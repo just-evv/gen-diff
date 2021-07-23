@@ -53,11 +53,7 @@ function compareTrees(array $tree1, array $tree2): array
 
     $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
-    return array_map(
-        /**
-        * @throws Exception
-        */
-        function ($key) use ($tree1, $tree2): array {
+    return array_map(function ($key) use ($tree1, $tree2): array {
         switch (true) {
             case (array_key_exists($key, $tree1) && array_key_exists($key, $tree2)):
                 switch (true) {
@@ -75,5 +71,6 @@ function compareTrees(array $tree1, array $tree2): array
             default:
                 throw new Exception("something went wrong");
         }
-    }, $allKeys);
+    },
+        $allKeys);
 }

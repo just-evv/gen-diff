@@ -11,13 +11,13 @@ class GenDiffTest extends TestCase
 {
     public function getPathFixture(string $fixtureName): string
     {
-        return realpath(implode(DIRECTORY_SEPARATOR , [__DIR__, 'fixtures', $fixtureName]));
+        return realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, 'fixtures', $fixtureName]));
     }
 
     #[Pure]
     public function dataProvider(): array
     {
-       return [
+        return [
             [
                 $this->getPathFixture('file1.json'),
                 $this->getPathFixture('file2.json'),
@@ -30,36 +30,36 @@ class GenDiffTest extends TestCase
                 $this->getPathFixture('ExpectedStylish'),
                 'stylish'
             ],
-          [
-               $this->getPathFixture('file1.json'),
-               $this->getPathFixture('file2.json'),
-               $this->getPathFixture('ExpectedPlain'),
-               'plain'
-           ],
-           [
-               $this->getPathFixture('file1.yaml'),
-               $this->getPathFixture('file2.yaml'),
-               $this->getPathFixture('ExpectedPlain'),
-               'plain'
-           ],
-           [
-               $this->getPathFixture('file1.json'),
-               $this->getPathFixture('file2.json'),
-               $this->getPathFixture('ExpectedJson.json'),
-               'json'
-           ],
-           [
-               $this->getPathFixture('file1.yaml'),
-               $this->getPathFixture('file2.yaml'),
-               $this->getPathFixture('ExpectedJson.json'),
-               'json'
-           ],
-           [
-           $this->getPathFixture('file1.json'),
-               $this->getPathFixture('file2.yaml'),
-               $this->getPathFixture('ExpectedStylish'),
-               'stylish'
-           ]
+            [
+                $this->getPathFixture('file1.json'),
+                $this->getPathFixture('file2.json'),
+                $this->getPathFixture('ExpectedPlain'),
+                'plain'
+            ],
+            [
+                $this->getPathFixture('file1.yaml'),
+                $this->getPathFixture('file2.yaml'),
+                $this->getPathFixture('ExpectedPlain'),
+                'plain'
+            ],
+            [
+                $this->getPathFixture('file1.json'),
+                $this->getPathFixture('file2.json'),
+                $this->getPathFixture('ExpectedJson.json'),
+                'json'
+            ],
+            [
+                $this->getPathFixture('file1.yaml'),
+                $this->getPathFixture('file2.yaml'),
+                $this->getPathFixture('ExpectedJson.json'),
+                'json'
+            ],
+            [
+                $this->getPathFixture('file1.json'),
+                $this->getPathFixture('file2.yaml'),
+                $this->getPathFixture('ExpectedStylish'),
+                'stylish'
+            ]
         ];
     }
 
