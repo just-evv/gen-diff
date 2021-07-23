@@ -58,7 +58,11 @@ function compareTrees(array $tree1, array $tree2): array
             case (array_key_exists($key, $tree1) && array_key_exists($key, $tree2)):
                 switch (true) {
                     case (is_array($tree1[$key]) && is_array($tree2[$key])):
-                        return ['name' => $key, 'type' => 'nested', 'children' => compareTrees($tree1[$key], $tree2[$key])];
+                        return [
+                            'name' => $key,
+                            'type' => 'nested',
+                            'children' => compareTrees($tree1[$key], $tree2[$key])
+                        ];
                     case ($tree1[$key] === $tree2[$key]):
                         return createNode($key, 'no changes', $tree1[$key]);
                     default:
