@@ -78,9 +78,7 @@ function genStylish(array $tree, int $depth = 0): string
             return makeString($depth, $name, $value);
         }
 
-        $name = getName($node);
         $value = getValue($node);
-        $type = getType($node);
         $prefix = getPrefix($type);
 
         if ($type === 'changed') {
