@@ -22,9 +22,6 @@ function formatValue(mixed $value, int $depth): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
-/**
- * @throws Exception
- */
 function getPrefix(string $type): mixed
 {
     $prefixRemovedValue = '  - ';
@@ -61,7 +58,6 @@ function formatArray(array $value, int $depth): string
     return formatArrayWithOpenCloseBraces($result, $depth);
 }
 
-
 function makeString(int $depth, string $name, mixed $value, string $prefix = '    '): string
 {
     $formattedValue = formatValue($value, $depth);
@@ -70,26 +66,6 @@ function makeString(int $depth, string $name, mixed $value, string $prefix = '  
     $prefixIndentation = str_repeat($indentation, $depth);
 
     return $prefixIndentation . $prefix . $name . ': ' . $formattedValue;
-}
-
-/**
- * @throws Exception
- */
-function formatNode(array $node, int $depth): string
-{
-    $name = getName($node);
-    $value = getValue($node);
-    $type = getType($node);
-    $prefix = getPrefix($type);
-
-    if ($type === 'changed') {
-        $value2 = getValue2($node);
-        $result1 = makeString($depth, $name, $value, $prefix[0]);
-        $result2 = makeString($depth, $name, $value2, $prefix[1]);
-
-        return $result1 . "\n" . $result2;
-    }
-    return  makeString($depth, $name, $value, $prefix);
 }
 
 function genStylish(array $tree, int $depth = 0): string
@@ -102,7 +78,19 @@ function genStylish(array $tree, int $depth = 0): string
             return makeString($depth, $name, $value);
         }
 
-        return formatNode($node, $depth);
+        $name = getName($node);
+        $value = getValue($node);
+        $type = getType($node);
+        $prefix = getPrefix($type);
+
+        if ($type === 'changed') {
+            $value2 = getValue2($node);
+            $result1 = makeString($depth, $name, $value, $prefix[0]);
+            $result2 = makeString($depth, $name, $value2, $prefix[1]);
+
+            return $result1 . "\n" . $result2;
+        }
+        return  makeString($depth, $name, $value, $prefix);
     }, $tree);
 
     return formatArrayWithOpenCloseBraces($res, $depth);
