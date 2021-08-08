@@ -9,23 +9,18 @@ use Exception;
 use function Functional\flatten;
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
-use function Differ\DiffGenerator\getChildren;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
-function formatValue(mixed $value): string
+function checkValue(mixed $value): string
 {
     return match (true) {
+        is_array($value) => '[complex value]',
         is_bool($value) => $value ? 'true' : 'false',
         is_null($value) => 'null',
         is_integer($value) => (string) $value,
         default => "'$value'",
     };
-}
-
-function checkValue(mixed $value): string
-{
-    return is_array($value) ? '[complex value]' : formatValue($value);
 }
 
 /**
@@ -57,7 +52,7 @@ function genPlain(array $tree, string $rootPath = null): string
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
         if ($type === 'nested') {
-            return genPlain(getChildren($node), $path);
+            return genPlain(getValue($node), $path);
         } else {
             return genString($type, $node, $path);
         }

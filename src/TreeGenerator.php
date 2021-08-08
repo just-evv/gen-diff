@@ -14,9 +14,8 @@ use function Functional\sort;
 function createNode(string $name, string $type, mixed $value1, mixed $value2 = null): array
 {
     return match ($type) {
-        'no changes', 'removed', 'added' => ['name' => $name, 'type' => $type, 'value' => $value1],
+        'no changes', 'removed', 'added', 'nested' => ['name' => $name, 'type' => $type, 'value' => $value1],
         'changed' => ['name' => $name, 'type' => $type, 'value' => $value1, 'value2' => $value2],
-        'nested' => ['name' => $name, 'type' => $type, 'children' => $value1],
         default => throw new Exception("undefined type"),
     };
 }
@@ -29,11 +28,6 @@ function getName(array $node): string
 function getType(array $node): string
 {
     return $node['type'];
-}
-
-function getChildren(array $node): array
-{
-    return $node['children'];
 }
 
 function getValue(array $node): mixed
