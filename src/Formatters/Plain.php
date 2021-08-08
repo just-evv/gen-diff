@@ -12,7 +12,7 @@ use function Differ\DiffGenerator\getType;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
-function checkValue(mixed $value): string
+function formatValue(mixed $value): string
 {
     return match (true) {
         is_array($value) => '[complex value]',
@@ -32,13 +32,13 @@ function genString(string $type, array $node, string $path): string
         case 'no changes':
             return '';
         case 'changed':
-            $value1 = checkValue(getValue($node));
-            $value2 = checkValue(getValue2($node));
+            $value1 = formatValue(getValue($node));
+            $value2 = formatValue(getValue2($node));
             return  "Property '$path' was updated. From $value1 to $value2";
         case 'removed':
             return  "Property '$path' was removed";
         case 'added':
-            $addedValue = checkValue(getValue($node));
+            $addedValue = formatValue(getValue($node));
             return  "Property '$path' was added with value: $addedValue";
         default:
             throw new Exception('type undefined');
