@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Differ\Differ;
 
 use Exception;
+
 use function Differ\Parsers\parseFile;
 use function Differ\DiffGenerator\compareTrees;
 use function Differ\Formatter\format;
