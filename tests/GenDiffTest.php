@@ -87,7 +87,6 @@ class GenDiffTest extends TestCase
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Parsers\jsonParse
      * @covers       \Differ\Parsers\yamlParse
-     * @covers       \Differ\Parsers\yamlParseHelper
      */
     public function testGenDiff(string $path1, string $path2, string $expected, string $format): void
     {
