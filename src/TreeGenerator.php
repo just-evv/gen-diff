@@ -16,6 +16,7 @@ function createNode(string $name, string $type, mixed $value1, mixed $value2 = n
     return match ($type) {
         'no changes', 'removed', 'added' => ['name' => $name, 'type' => $type, 'value' => $value1],
         'changed' => ['name' => $name, 'type' => $type, 'value' => $value1, 'value2' => $value2],
+        'nested' => ['name' => $name, 'type' => $type, 'children' => $value1],
         default => throw new Exception("undefined type"),
     };
 }
@@ -56,17 +57,12 @@ function compareTrees(array $tree1, array $tree2): array
     return array_map(function ($key) use ($tree1, $tree2): array {
         switch (true) {
             case (array_key_exists($key, $tree1) && array_key_exists($key, $tree2)):
-                switch (true) {
-                    case (is_array($tree1[$key]) && is_array($tree2[$key])):
-                        return [
-                            'name' => $key,
-                            'type' => 'nested',
-                            'children' => compareTrees($tree1[$key], $tree2[$key])
-                        ];
-                    case ($tree1[$key] === $tree2[$key]):
-                        return createNode($key, 'no changes', $tree1[$key]);
-                    default:
-                        return createNode($key, 'changed', $tree1[$key], $tree2[$key]);
+                if (is_array($tree1[$key]) && is_array($tree2[$key])) {
+                    return createNode($key, 'nested', compareTrees($tree1[$key], $tree2[$key]));
+                } elseif ($tree1[$key] === $tree2[$key]) {
+                    return createNode($key, 'no changes', $tree1[$key]);
+                } else {
+                    return createNode($key, 'changed', $tree1[$key], $tree2[$key]);
                 }
             case array_key_exists($key, $tree1):
                 return createNode($key, 'removed', $tree1[$key]);

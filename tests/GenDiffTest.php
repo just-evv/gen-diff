@@ -14,7 +14,6 @@ class GenDiffTest extends TestCase
         return realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, 'fixtures', $fixtureName]));
     }
 
-    #[Pure]
     public function dataProvider(): array
     {
         return [
