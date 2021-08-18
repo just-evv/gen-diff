@@ -45,7 +45,7 @@ function compareTrees(array $tree1, array $tree2): array
     $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
     return array_map(function ($key) use ($tree1, $tree2): array {
-        if (!array_key_exists($key, $tree2)){
+        if (!array_key_exists($key, $tree2)) {
             return ['name' => $key, 'type' => 'removed', 'value' => $tree1[$key]];
         } elseif (!array_key_exists($key, $tree1)) {
             return ['name' => $key, 'type' => 'added', 'value' => $tree2[$key]];
@@ -54,7 +54,7 @@ function compareTrees(array $tree1, array $tree2): array
         } elseif ($tree1[$key] === $tree2[$key]) {
             return ['name' => $key, 'type' => 'no changes', 'value' => $tree1[$key]];
         } else {
-            return ['name' => $key, 'type' => 'changed', 'value' => $tree1[$key], 'value2' =>$tree2[$key]];
+            return ['name' => $key, 'type' => 'changed', 'value' => $tree1[$key], 'value2' => $tree2[$key]];
         }
     },
         $allKeys);

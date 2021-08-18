@@ -13,7 +13,6 @@ use function Differ\DiffGenerator\getChildren;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
-
 function formatValue(mixed $value): string
 {
     return match (true) {
