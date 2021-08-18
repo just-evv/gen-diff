@@ -8,6 +8,7 @@ use Exception;
 
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
+use function Differ\DiffGenerator\getChildren;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
 
@@ -54,7 +55,7 @@ function genStylish(array $tree, int $depth = 0): string
         $name = getName($node);
         $type = getType($node);
         if ($type === 'nested') {
-            $value = genStylish($node['children'], $depth + 1);
+            $value = genStylish(getChildren($node), $depth + 1);
             return makeString($depth, $name, $value);
         }
 

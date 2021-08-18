@@ -66,7 +66,7 @@ class GenDiffTest extends TestCase
      * @dataProvider dataProvider
      *
      * @covers       \Differ\DiffGenerator\compareTrees
-     * @covers       \Differ\DiffGenerator\createNode
+     * @covers       \Differ\DiffGenerator\getChildren
      * @covers       \Differ\DiffGenerator\getName
      * @covers       \Differ\DiffGenerator\getType
      * @covers       \Differ\DiffGenerator\getValue

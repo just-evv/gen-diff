@@ -11,15 +11,6 @@ use function Functional\sort;
 /**
  * @throws Exception
  */
-function createNode(string $name, string $type, mixed $value1, mixed $value2 = null): array
-{
-    return match ($type) {
-        'no changes', 'removed', 'added', 'nested' => ['name' => $name, 'type' => $type, 'value' => $value1],
-        'changed' => ['name' => $name, 'type' => $type, 'value' => $value1, 'value2' => $value2],
-        default => throw new Exception("undefined type"),
-    };
-}
-
 function getName(array $node): string
 {
     return $node['name'];
@@ -38,6 +29,11 @@ function getValue(array $node): mixed
 function getValue2(array $node): mixed
 {
     return $node['value2'];
+}
+
+function getChildren(array $node): array
+{
+    return $node['children'];
 }
 
 function compareTrees(array $tree1, array $tree2): array

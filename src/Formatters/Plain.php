@@ -9,8 +9,10 @@ use Exception;
 use function Functional\flatten;
 use function Differ\DiffGenerator\getName;
 use function Differ\DiffGenerator\getType;
+use function Differ\DiffGenerator\getChildren;
 use function Differ\DiffGenerator\getValue;
 use function Differ\DiffGenerator\getValue2;
+
 
 function formatValue(mixed $value): string
 {
@@ -52,7 +54,7 @@ function genPlain(array $tree, string $rootPath = null): string
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
         if ($type === 'nested') {
-            return genPlain($node['children'], $path);
+            return genPlain(getChildren($node), $path);
         } else {
             return genString($type, $node, $path);
         }
