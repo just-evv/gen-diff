@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Differ\DiffGenerator;
 
-use Exception;
-
 use function Functional\sort;
 
 function getName(array $node): string
