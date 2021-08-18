@@ -52,7 +52,7 @@ function genPlain(array $tree, string $rootPath = null): string
         $path = isset($rootPath) ? implode('.', [$rootPath, $name]) : $name;
         $type = getType($node);
         if ($type === 'nested') {
-            return genPlain(getValue($node), $path);
+            return genPlain($node['children'], $path);
         } else {
             return genString($type, $node, $path);
         }

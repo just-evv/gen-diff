@@ -54,7 +54,7 @@ function genStylish(array $tree, int $depth = 0): string
         $name = getName($node);
         $type = getType($node);
         if ($type === 'nested') {
-            $value = genStylish(getValue($node), $depth + 1);
+            $value = genStylish($node['children'], $depth + 1);
             return makeString($depth, $name, $value);
         }
 

@@ -49,21 +49,16 @@ function compareTrees(array $tree1, array $tree2): array
     $allKeys = sort($merged, fn($left, $right) => strcmp($left, $right));
 
     return array_map(function ($key) use ($tree1, $tree2): array {
-        switch (true) {
-            case (array_key_exists($key, $tree1) && array_key_exists($key, $tree2)):
-                if (is_array($tree1[$key]) && is_array($tree2[$key])) {
-                    return createNode($key, 'nested', compareTrees($tree1[$key], $tree2[$key]));
-                } elseif ($tree1[$key] === $tree2[$key]) {
-                    return createNode($key, 'no changes', $tree1[$key]);
-                } else {
-                    return createNode($key, 'changed', $tree1[$key], $tree2[$key]);
-                }
-            case array_key_exists($key, $tree1):
-                return createNode($key, 'removed', $tree1[$key]);
-            case array_key_exists($key, $tree2):
-                return createNode($key, 'added', $tree2[$key]);
-            default:
-                throw new Exception("something went wrong");
+        if (!array_key_exists($key, $tree2)){
+            return ['name' => $key, 'type' => 'removed', 'value' => $tree1[$key]];
+        } elseif (!array_key_exists($key, $tree1)) {
+            return ['name' => $key, 'type' => 'added', 'value' => $tree2[$key]];
+        } elseif (is_array($tree1[$key]) && is_array($tree2[$key])) {
+            return ['name' => $key, 'type' => 'nested', 'children' => compareTrees($tree1[$key], $tree2[$key])];
+        } elseif ($tree1[$key] === $tree2[$key]) {
+            return ['name' => $key, 'type' => 'no changes', 'value' => $tree1[$key]];
+        } else {
+            return ['name' => $key, 'type' => 'changed', 'value' => $tree1[$key], 'value2' =>$tree2[$key]];
         }
     },
         $allKeys);
