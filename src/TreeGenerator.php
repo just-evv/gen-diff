@@ -8,9 +8,6 @@ use Exception;
 
 use function Functional\sort;
 
-/**
- * @throws Exception
- */
 function getName(array $node): string
 {
     return $node['name'];
