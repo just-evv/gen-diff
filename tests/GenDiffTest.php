@@ -14,7 +14,6 @@ class GenDiffTest extends TestCase
         return realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, 'fixtures', $fixtureName]));
     }
 
-    #[Pure]
     public function dataProvider(): array
     {
         return [
@@ -67,32 +66,27 @@ class GenDiffTest extends TestCase
      * @dataProvider dataProvider
      *
      * @covers       \Differ\DiffGenerator\compareTrees
-     * @covers       \Differ\DiffGenerator\createNode
+     * @covers       \Differ\DiffGenerator\getChildren
      * @covers       \Differ\DiffGenerator\getName
      * @covers       \Differ\DiffGenerator\getType
-     * @covers       \Differ\DiffGenerator\getChildren
      * @covers       \Differ\DiffGenerator\getValue
      * @covers       \Differ\DiffGenerator\getValue2
      * @covers       \Differ\Formatter\format
      * @covers       \Differ\Parsers\parseFile
-     * @covers       \Differ\Parsers\getExtension
-     * @covers       \Differ\Parsers\fileGetContent
+     * @covers       \Differ\Differ\getExtension
+     * @covers       \Differ\Differ\fileGetContent
      * @covers       \Differ\Formatter\Stylish\genStylish
      * @covers       \Differ\Formatter\Stylish\formatValue
      * @covers       \Differ\Formatter\Stylish\formatArray
      * @covers       \Differ\Formatter\Stylish\makeString
      * @covers       \Differ\Formatter\Stylish\formatArrayWithOpenCloseBraces
-     * @covers       \Differ\Formatter\Stylish\getPrefix
      * @covers       \Differ\Formatter\Json\genJson
-     * @covers       \Differ\Formatter\Plain\checkValue
      * @covers       \Differ\Formatter\Plain\formatValue
      * @covers       \Differ\Formatter\Plain\genString
      * @covers       \Differ\Formatter\Plain\genPlain
      * @covers       \Differ\Differ\genDiff
      * @covers       \Differ\Parsers\jsonParse
      * @covers       \Differ\Parsers\yamlParse
-     * @covers       \Differ\Parsers\yamlParseHelper
-     * @throws \Exception
      */
     public function testGenDiff(string $path1, string $path2, string $expected, string $format): void
     {

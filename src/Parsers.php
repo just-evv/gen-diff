@@ -7,45 +7,23 @@ namespace Differ\Parsers;
 use Exception;
 use Symfony\Component\Yaml\Yaml;
 
-function getExtension(string $pathToFile): string
+function jsonParse(string $fileContent): array
 {
-    return pathinfo($pathToFile, PATHINFO_EXTENSION);
+    return json_decode($fileContent, true);
 }
 
-function fileGetContent(string $pathToFile): string
+function yamlParse(string $fileContent): array
 {
-    $file = file_get_contents($pathToFile);
-    if ($file === false) {
-        throw new Exception("{$pathToFile} failed to get content");
-    };
-    return $file;
+    return Yaml::parse($fileContent);
 }
 
-function jsonParse(string $pathToFile): array
+function parseFile(string $fileContent, string $extension): array
 {
-    return json_decode(fileGetContent($pathToFile), true);
-}
-
-function yamlParseHelper(object $object): array
-{
-    $array = (array) $object;
-    return array_map(fn ($node) => is_object($node) ? yamlParseHelper($node) : $node, $array);
-}
-
-function yamlParse(string $pathToFile): array
-{
-    $parsedToObject = Yaml::parse(fileGetContent($pathToFile), Yaml::PARSE_OBJECT_FOR_MAP);
-    return yamlParseHelper($parsedToObject);
-}
-
-function parseFile(string $pathToFile): array
-{
-    $extension = getExtension($pathToFile);
     if ($extension === 'json') {
-        return jsonParse($pathToFile);
+        return jsonParse($fileContent);
     } elseif (in_array($extension, ['yaml', 'yml'], true)) {
-        return yamlParse($pathToFile);
+        return yamlParse($fileContent);
     } else {
-        throw new Exception("{$pathToFile} invalid extension");
+        throw new Exception("{$fileContent} invalid extension");
     }
 }

@@ -22,25 +22,6 @@ function formatValue(mixed $value, int $depth): string
     return is_null($value) ? 'null' :  (string) $value;
 }
 
-function getPrefix(string $type): mixed
-{
-    $prefixRemovedValue = '  - ';
-    $prefixAddedValue = '  + ';
-    $prefixNoChanges = '    ';
-
-    if ($type === 'removed') {
-        return $prefixRemovedValue;
-    } elseif ($type === 'added') {
-        return $prefixAddedValue;
-    } elseif ($type === 'changed') {
-        return [$prefixRemovedValue, $prefixAddedValue];
-    } elseif ($type === 'no changes') {
-        return $prefixNoChanges;
-    } else {
-        throw new Exception('undefined type');
-    }
-}
-
 function formatArrayWithOpenCloseBraces(array $result, int $depth): string
 {
     $indentation = '    ';
@@ -79,15 +60,24 @@ function genStylish(array $tree, int $depth = 0): string
         }
 
         $value = getValue($node);
-        $prefix = getPrefix($type);
 
         if ($type === 'changed') {
             $value2 = getValue2($node);
-            $result1 = makeString($depth, $name, $value, $prefix[0]);
-            $result2 = makeString($depth, $name, $value2, $prefix[1]);
+            $prefix1 = '  - ';
+            $prefix2 = '  + ';
+            $result1 = makeString($depth, $name, $value, $prefix1);
+            $result2 = makeString($depth, $name, $value2, $prefix2);
 
             return $result1 . "\n" . $result2;
         }
+
+        $prefix = match ($type) {
+            'added' => '  + ',
+            'removed' => '  - ',
+            'no changes' => '    ',
+            default => throw new Exception('undefined type'),
+        };
+
         return  makeString($depth, $name, $value, $prefix);
     }, $tree);
 

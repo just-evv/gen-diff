@@ -13,12 +13,12 @@ use function Differ\Formatter\Json\genJson;
 /**
  * @throws Exception
  */
-function format(array $file, string $formatName): string
+function format(array $tree, string $formatName): string
 {
     return match ($formatName) {
-        'stylish' => genStylish($file),
-        'plain' => genPlain($file),
-        'json' => genJson($file),
+        'stylish' => genStylish($tree),
+        'plain' => genPlain($tree),
+        'json' => genJson($tree),
         default => throw new Exception('Undefined format name'),
     };
 }
