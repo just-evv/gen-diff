@@ -17,7 +17,7 @@ function yamlParse(string $fileContent): array
     return Yaml::parse($fileContent);
 }
 
-function parseFile(string $fileContent, string $extension): array
+function parse(string $fileContent, string $extension): array
 {
     if ($extension === 'json') {
         return jsonParse($fileContent);

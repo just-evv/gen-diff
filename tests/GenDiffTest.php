@@ -72,7 +72,7 @@ class GenDiffTest extends TestCase
      * @covers       \Differ\DiffGenerator\getValue
      * @covers       \Differ\DiffGenerator\getValue2
      * @covers       \Differ\Formatter\format
-     * @covers       \Differ\Parsers\parseFile
+     * @covers       \Differ\Parsers\parse
      * @covers       \Differ\Differ\getExtension
      * @covers       \Differ\Differ\fileGetContent
      * @covers       \Differ\Formatter\Stylish\genStylish

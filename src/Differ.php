@@ -6,7 +6,7 @@ namespace Differ\Differ;
 
 use Exception;
 
-use function Differ\Parsers\parseFile;
+use function Differ\Parsers\parse;
 use function Differ\DiffGenerator\compareTrees;
 use function Differ\Formatter\format;
 
@@ -16,8 +16,8 @@ use function Differ\Formatter\format;
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $formatName = 'stylish'): string
 {
-    $fileContent1 = parseFile(fileGetContent($pathToFile1), getExtension($pathToFile1));
-    $fileContent2 = parseFile(fileGetContent($pathToFile2), getExtension($pathToFile2));
+    $fileContent1 = parse(fileGetContent($pathToFile1), getExtension($pathToFile1));
+    $fileContent2 = parse(fileGetContent($pathToFile2), getExtension($pathToFile2));
 
     $diff = compareTrees($fileContent1, $fileContent2);
 
